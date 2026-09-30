@@ -247,6 +247,11 @@ section[id] { scroll-margin-top: 84px; }
 .ticket__city { font-size: clamp(1.7rem, 3vw, 2.4rem); font-weight: 900; letter-spacing: -.03em; }
 .ticket__addr { font-weight: 700; color: var(--ink-2); }
 .ticket__go { font-weight: 900; color: var(--pink-deep); }
+/* automat mimo provoz */
+.ticket--off { opacity: .72; }
+.ticket--off .ticket__stav { display: inline-block; justify-self: start; margin-top: 4px; padding: .2em .8em; border-radius: 999px; background: #FBE3E8; color: #A32740; font-weight: 900; font-size: .84rem; }
+.tickets { grid-template-columns: repeat(3, 1fr); }
+@media (min-width: 1081px) { .tickets { grid-template-columns: repeat(3, 1fr); } }
 
 .partner { margin-top: clamp(38px, 6vw, 66px); display: grid; grid-template-columns: 270px 1fr; gap: clamp(24px, 4vw, 54px); align-items: center; background: var(--white); border-radius: 34px; padding: clamp(20px, 3vw, 34px); box-shadow: var(--soft); }
 .partner h3 { font-size: clamp(1.8rem, 3.6vw, 2.9rem); margin-bottom: 12px; }
