@@ -320,11 +320,16 @@
       posadit();
       addEventListener("resize", posadit);
 
+      // Bez připínání sekce — pin se spolu s plynulým scrollem trhal.
+      // Trasa se kreslí prostě podle toho, jak sekce projíždí obrazovkou.
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: scena, start: "center center", end: "+=" + Math.round(innerHeight * 1.4),
-          scrub: .8, pin: !mene, anticipatePin: 1,
-          onUpdate: self => zastavky.forEach(z => z.classList.toggle("is-on", self.progress >= parseFloat(z.dataset.t) - .04)),
+          trigger: scena, start: "top 72%", end: "bottom 40%",
+          scrub: 1,
+          onUpdate: self => {
+            // zastávka se rozsvítí, až k ní kornout opravdu dojede
+            zastavky.forEach(z => z.classList.toggle("is-on", self.progress >= parseFloat(z.dataset.t)));
+          },
         },
       });
       tl.to(nakreslena, { strokeDashoffset: 0, ease: "none" }, 0)
