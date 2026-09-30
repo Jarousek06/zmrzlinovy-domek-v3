@@ -82,7 +82,29 @@
 
   /* ---- parallax fotek ---- */
   if (!mene) {
-    gsap.to(".uvod__foto", { y: -50, ease: "none", scrollTrigger: { trigger: ".blok--uvod", start: "top top", end: "bottom top", scrub: .6 } });
+    gsap.to(".uvod__koláž", { y: -46, ease: "none", scrollTrigger: { trigger: ".blok--uvod", start: "top top", end: "bottom top", scrub: .6 } });
+
+    // kolečka v úvodu se jemně posouvají za myší — koláž tím ožije
+    const kolaz = document.querySelector("[data-parallax]");
+    if (kolaz && matchMedia("(hover: hover)").matches) {
+      const vrstvy = [...kolaz.querySelectorAll("[data-hloubka]")].map(el => ({
+        el, h: +el.dataset.hloubka,
+        x: gsap.quickTo(el, "x", { duration: .8, ease: "power3" }),
+        y: gsap.quickTo(el, "y", { duration: .8, ease: "power3" }),
+      }));
+      addEventListener("pointermove", e => {
+        const r = kolaz.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > innerHeight) return;
+        const dx = (e.clientX - (r.left + r.width / 2)) / innerWidth;
+        const dy = (e.clientY - (r.top + r.height / 2)) / innerHeight;
+        vrstvy.forEach(v => { v.x(dx * v.h); v.y(dy * v.h); });
+      });
+    }
+
+    // kolečka se plynule vznášejí, i když myš stojí
+    gsap.utils.toArray(".uvod__kolecko").forEach((el, i) => {
+      gsap.to(el, { yPercent: i % 2 ? 6 : -6, duration: 3.4 + i * .6, ease: "sine.inOut", yoyo: true, repeat: -1 });
+    });
     gsap.utils.toArray(".polozka__foto img").forEach(img => {
       gsap.fromTo(img, { y: -10 }, { y: 10, ease: "none", scrollTrigger: { trigger: img, start: "top bottom", end: "bottom top", scrub: .8 } });
     });

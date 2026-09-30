@@ -108,20 +108,41 @@ section[id] { scroll-margin-top: 80px; }
 .burger[aria-expanded="true"] span:last-child { transform: translateY(-3.5px) rotate(-45deg); }
 
 /* ---------- 1. úvod ---------- */
-.uvod { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(24px, 4vw, 56px); align-items: center; }
-.blok--uvod h1 { font-size: clamp(3.2rem, 9.6vw, 8rem); }
+.uvod { display: grid; grid-template-columns: 1.02fr .98fr; gap: clamp(24px, 4vw, 56px); align-items: center; }
+.blok--uvod h1 { font-size: clamp(3.2rem, 9.4vw, 7.6rem); }
 .blok--uvod h1 .hand { font-size: 1.14em; margin-top: -.12em; }
-.uvod__lead { max-width: 24em; font-size: 1.16rem; margin-top: 18px; }
-.uvod__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 26px; }
-.status { display: inline-flex; align-items: center; gap: 10px; padding: 8px 18px; margin: 0 0 20px; background: #fff; border-radius: 999px; box-shadow: var(--stin); font-weight: 900; font-size: .92rem; color: var(--ink); }
+.uvod__lead { max-width: 25em; font-size: 1.14rem; margin-top: 16px; }
+.uvod__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 24px; }
+.status { display: inline-flex; align-items: center; gap: 10px; padding: 8px 18px; margin: 0 0 18px; background: #fff; border-radius: 999px; box-shadow: var(--stin); font-weight: 900; font-size: .92rem; color: var(--ink); }
 .status i { width: 10px; height: 10px; border-radius: 50%; background: #B9AFB4; }
 .status.is-open i { background: #2FA55E; box-shadow: 0 0 0 4px rgba(47, 165, 94, .22); }
-.uvod__foto { position: relative; margin: 0; justify-self: center; width: min(400px, 100%); }
+
+/* co dnes točíme — hned v úvodu, ať člověk ví, pro co jede */
+.dnes { margin-top: 22px; background: rgba(255, 255, 255, .62); border-radius: var(--r); padding: 14px 18px; max-width: 30em; }
+.dnes__stitek { display: inline-block; font-size: .68rem; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; color: var(--malina); margin-bottom: 4px; }
+.dnes__dvojice { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.dnes__dvojice b { display: inline-flex; align-items: center; gap: 8px; font-size: 1.2rem; }
+.dnes__dvojice i { width: 18px; height: 18px; border-radius: 50% 50% 46% 46%; background: var(--c); box-shadow: 0 0 0 2px #fff; }
+.dnes__dvojice span { font-size: .9rem; opacity: .72; }
+
+/* jak daleko to k nim je */
+.dalky { list-style: none; display: flex; flex-wrap: wrap; gap: 10px 26px; margin: 26px 0 0; padding: 0; }
+.dalky li { display: flex; align-items: baseline; gap: 8px; }
+.dalky b { font-family: var(--hand); font-weight: 700; font-size: 1.9rem; line-height: 1; color: var(--malina); }
+.dalky span { font-weight: 700; font-size: .92rem; opacity: .78; }
+
+/* koláž fotek s jemným posunem za myší */
+.uvod__koláž { position: relative; justify-self: center; width: min(420px, 100%); }
+.uvod__foto { position: relative; margin: 0; }
 .uvod__foto img { width: 100%; border-radius: 200px 200px var(--r-velky) var(--r-velky); box-shadow: var(--stin-vic); transform: rotate(-2deg); background: #fff; }
+.uvod__kolecko { position: absolute; margin: 0; border-radius: 50%; overflow: hidden; border: 6px solid #fff; box-shadow: var(--stin-vic); will-change: transform; }
+.uvod__kolecko img { width: 100%; height: 100%; object-fit: cover; }
+.uvod__kolecko--a { width: clamp(110px, 13vw, 150px); aspect-ratio: 1; left: -46px; top: 18%; }
+.uvod__kolecko--b { width: clamp(96px, 11vw, 128px); aspect-ratio: 1; right: -34px; bottom: 12%; }
 .floaties { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1; }
 .floatie { position: absolute; display: block; opacity: 0; will-change: transform, opacity; }
 
-.fakta { list-style: none; width: min(var(--sirka), 100%); margin: clamp(34px, 5vw, 64px) auto 0; padding: 8px var(--pad); display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; position: relative; z-index: 2; }
+.fakta { list-style: none; width: min(var(--sirka), 100%); margin: clamp(30px, 4.5vw, 58px) auto 0; padding: 8px var(--pad); display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; position: relative; z-index: 2; }
 .fakta li { background: rgba(255, 255, 255, .55); padding: 16px 18px; display: grid; gap: 2px; }
 .fakta li:first-child { border-radius: var(--r) 0 0 var(--r); }
 .fakta li:last-child { border-radius: 0 var(--r) var(--r) 0; }
@@ -345,9 +366,12 @@ h2 .hand { font-size: 1.16em; }
   .burger { display: block; }
   .nav__call { display: none; }
   .uvod, .cenik, .kontakt, .prichute__telo, .privoz, .partner { grid-template-columns: 1fr; }
+  .uvod__koláž { margin-top: 26px; width: min(360px, 84vw); }
+  .uvod__kolecko--a { left: -24px; }
+  .uvod__kolecko--b { right: -18px; }
   .prichute__telo { justify-items: center; text-align: center; }
   .prichute__info { max-width: none; }
-  .uvod__foto { margin-top: 22px; }
+
   .mapa__svg { display: none; }
   .zastavky { position: relative; display: grid; gap: 14px; padding-left: 36px; }
   .zastavky::before { content: ""; position: absolute; left: 9px; top: 12px; bottom: 12px; border-left: 4px dotted rgba(76, 107, 34, .5); }
@@ -369,6 +393,10 @@ h2 .hand { font-size: 1.16em; }
   .polaroidy { justify-content: flex-start; overflow-x: auto; scroll-snap-type: x mandatory; }
   .polaroidy figure { flex-basis: 176px; scroll-snap-align: center; }
   .kontakt__mapa iframe { height: 300px; }
+  .dalky { gap: 8px 18px; }
+  .dalky b { font-size: 1.6rem; }
+  .uvod__kolecko--a { width: 92px; left: -14px; top: 12%; }
+  .uvod__kolecko--b { width: 80px; right: -10px; }
   .sticker--rating { left: -6px; width: 94px; height: 94px; }
   .sticker--rating b { font-size: 1.55rem; }
   .tabule { padding: 22px 20px; border-width: 9px; }
