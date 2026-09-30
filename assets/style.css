@@ -139,6 +139,9 @@ section[id] { scroll-margin-top: 80px; }
 /* ---------- 2. vyber si příchuť ---------- */
 .blok--prichute { overflow: hidden; isolation: isolate; }
 .flood { position: absolute; z-index: 0; width: 10px; height: 10px; border-radius: 50%; transform: scale(0); pointer-events: none; }
+/* nová příchuť se odkrývá kruhem, který roste přesně z bubliny (jako na bobaicecream.com) */
+.vrstva { position: absolute; inset: 0; z-index: 3; background: var(--barva-nova); color: var(--text-nova); overflow: hidden; padding-top: inherit; padding-bottom: inherit; }
+.vrstva .bubliny, .vrstva .stitek, .vrstva .prichute__head { pointer-events: none; }
 .prichute__head { max-width: 760px; }
 .prichute__title { font-size: clamp(2.6rem, 7vw, 5.6rem); }
 .prichute__title .hand { font-size: 1.16em; }
@@ -298,9 +301,24 @@ h2 .hand { font-size: 1.16em; }
 .sad { position: relative; height: clamp(110px, 14vw, 170px); background: var(--berry); overflow: hidden; }
 .fruit { position: absolute; bottom: 0; width: 42px; will-change: transform; }
 .fruit svg { width: 100%; height: auto; display: block; }
-.pata { background: var(--berry); color: rgba(255, 243, 230, .7); font-size: .88rem; }
-.pata__in { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding-block: 20px; }
-.pata p { margin: 0; }
+
+.pata { background: var(--berry); color: rgba(255, 243, 230, .78); font-size: .95rem; padding-bottom: 18px; }
+.pata__mrizka { display: grid; grid-template-columns: 1.3fr 1fr 1.2fr 1fr; gap: clamp(24px, 3.5vw, 52px); padding-block: clamp(30px, 4vw, 52px); }
+.pata__znacka img { width: 72px; height: 72px; border-radius: 50%; background: rgba(255, 255, 255, .1); }
+.pata__claim { font-size: 1.5rem; color: var(--jahoda); margin: 12px 0 8px; }
+.pata__stav { font-weight: 900; color: #FFF3E6; margin: 0; }
+.pata__sloupec h4 { font-size: .76rem; text-transform: uppercase; letter-spacing: .18em; color: var(--jahoda); margin: 0 0 12px; font-weight: 900; }
+.pata__sloupec address { font-style: normal; margin-bottom: 10px; line-height: 1.6; }
+.pata__sloupec ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+.pata__sloupec li { line-height: 1.5; }
+.pata__mimo { opacity: .6; }
+.pata__site { display: flex; gap: 10px; margin-top: 14px; }
+.pata__site a { width: 42px; height: 42px; border-radius: 50%; background: rgba(255, 255, 255, .12); display: grid; place-items: center; transition: transform .25s ease, background .25s ease; }
+.pata__site a:hover { transform: translateY(-3px); background: var(--jahoda); }
+.pata__site svg { width: 20px; height: 20px; fill: #FFF3E6; }
+.pata__site a:hover svg { fill: var(--berry); }
+.pata__spodek { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding-top: 18px; border-top: 2px dotted rgba(255, 243, 230, .2); font-size: .85rem; opacity: .75; }
+.pata__spodek p { margin: 0; }
 
 /* ---------- skládání nadpisů ---------- */
 .spw { display: inline-block; white-space: nowrap; }
@@ -310,6 +328,7 @@ h2 .hand { font-size: 1.16em; }
 
 /* ---------- responzivita ---------- */
 @media (max-width: 1080px) {
+  .pata__mrizka { grid-template-columns: 1fr 1fr; }
   .zbozi, .mista, .citace__mrizka, .dotazy__mrizka { grid-template-columns: 1fr 1fr; }
   .recenze { grid-template-columns: 1fr; }
   .fakta { grid-template-columns: 1fr 1fr; }
@@ -344,6 +363,7 @@ h2 .hand { font-size: 1.16em; }
 }
 @media (max-width: 620px) {
   body { font-size: 16px; }
+  .pata__mrizka { grid-template-columns: 1fr; gap: 26px; }
   .zbozi, .mista, .citace__mrizka, .dotazy__mrizka, .fakta { grid-template-columns: 1fr; }
   .polozka { grid-template-columns: 110px 1fr; gap: 14px; }
   .polaroidy { justify-content: flex-start; overflow-x: auto; scroll-snap-type: x mandatory; }

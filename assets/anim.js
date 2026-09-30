@@ -206,52 +206,70 @@
       return .2126 * k[0] + .7152 * k[1] + .0722 * k[2] > .32;
     };
 
-    let aktivni = null, umysl;
+    const zaklad = sekce.querySelector(".blok__in");
+    let aktivni = null, umysl, vrstvaZiva = null;
     const vyber = (li, hned) => {
       if (li === aktivni) return;
       const b = li.querySelector("button");
       const barva = b.dataset.c;
+      const textBarva = svetla(barva) ? "#3A2A31" : "#ffffff";
       bubliny.forEach(x => x.classList.toggle("is-on", x === li));
       aktivni = li;
 
-      jmeno.textContent = b.dataset.name;
-      druh.textContent = b.dataset.kind;
-      popis.textContent = b.dataset.note;
-      sekce.style.setProperty("--text", svetla(barva) ? "#3A2A31" : "#ffffff");
-
-      if (mene || hned) {
+      const nastavZaklad = () => {
         sekce.style.setProperty("--barva", barva);
-      } else {
-        const rs = sekce.getBoundingClientRect(), rb = b.getBoundingClientRect();
-        const x = rb.left + rb.width / 2 - rs.left, y = rb.top + rb.height / 2 - rs.top;
-        const dosah = Math.max(
-          Math.hypot(x, y), Math.hypot(rs.width - x, y),
-          Math.hypot(x, rs.height - y), Math.hypot(rs.width - x, rs.height - y)
-        );
-        gsap.killTweensOf(flood);
-        gsap.set(flood, { backgroundColor: barva, left: x - 5, top: y - 5, scale: 0, opacity: 1 });
-        gsap.to(flood, {
-          scale: dosah / 5 + 2, duration: .8, ease: "power3.inOut",
-          onComplete: () => { sekce.style.setProperty("--barva", barva); gsap.set(flood, { scale: 0, opacity: 0 }); },
-        });
-        gsap.fromTo([jmeno, popis, druh], { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: .4, stagger: .04, ease: "power2.out", overwrite: true });
-      }
+        sekce.style.setProperty("--text", textBarva);
+        jmeno.textContent = b.dataset.name;
+        druh.textContent = b.dataset.kind;
+        popis.textContent = b.dataset.note;
+        if (fotka && b.dataset.img) { fotka.src = b.dataset.img; fotka.alt = b.dataset.name; }
+      };
 
-      if (fotka && b.dataset.img) {
-        if (mene || hned) {
-          fotka.src = b.dataset.img;
-          fotka.alt = b.dataset.name;
-        } else {
-          gsap.to(fotka, {
-            scale: .82, opacity: 0, rotate: -8, duration: .2, ease: "power2.in", overwrite: true,
-            onComplete: () => {
-              fotka.src = b.dataset.img;
-              fotka.alt = b.dataset.name;
-              gsap.fromTo(fotka, { scale: .82, opacity: 0, rotate: 10 }, { scale: 1, opacity: 1, rotate: 0, duration: .5, ease: "back.out(1.7)" });
-            },
-          });
-        }
-      }
+      if (mene || hned) { nastavZaklad(); return; }
+
+      // Novou příchuť odkryje kruh, který roste přesně z bubliny — stará zůstane pod ním.
+      // (Princip z bobaicecream.com: dvě vrstvy nad sebou a rostoucí kruhová maska.)
+      const rs = sekce.getBoundingClientRect(), rb = b.getBoundingClientRect();
+      const x = rb.left + rb.width / 2 - rs.left, y = rb.top + rb.height / 2 - rs.top;
+      const dosah = Math.max(
+        Math.hypot(x, y), Math.hypot(rs.width - x, y),
+        Math.hypot(x, rs.height - y), Math.hypot(rs.width - x, rs.height - y)
+      );
+
+      if (vrstvaZiva) vrstvaZiva.remove();
+      const vrstva = document.createElement("div");
+      vrstva.className = "vrstva";
+      vrstva.setAttribute("aria-hidden", "true");
+      vrstva.style.setProperty("--barva-nova", barva);
+      vrstva.style.setProperty("--text-nova", textBarva);
+
+      const klon = zaklad.cloneNode(true);
+      klon.querySelectorAll("[id]").forEach(e => e.removeAttribute("id"));
+      klon.querySelector(".prichute__nazev").textContent = b.dataset.name;
+      klon.querySelector(".prichute__druh").textContent = b.dataset.kind;
+      klon.querySelector(".prichute__popis").textContent = b.dataset.note;
+      const klonFoto = klon.querySelector(".prichute__foto img");
+      if (klonFoto && b.dataset.img) { klonFoto.src = b.dataset.img; klonFoto.alt = b.dataset.name; }
+      const poradi = bubliny.indexOf(li);
+      [...klon.querySelectorAll(".bubliny li")].forEach((el, i) => el.classList.toggle("is-on", i === poradi));
+      vrstva.appendChild(klon);
+      sekce.appendChild(vrstva);
+      vrstvaZiva = vrstva;
+
+      gsap.fromTo(vrstva,
+        { clipPath: "circle(0px at " + x + "px " + y + "px)" },
+        {
+          clipPath: "circle(" + Math.round(dosah) + "px at " + x + "px " + y + "px)",
+          duration: .85, ease: "power3.inOut",
+          onComplete: () => {
+            nastavZaklad();
+            vrstva.remove();
+            if (vrstvaZiva === vrstva) vrstvaZiva = null;
+          },
+        });
+      gsap.from(klon.querySelector(".prichute__foto"), { scale: .82, rotate: -8, duration: .7, ease: "back.out(1.6)" });
+      gsap.from(klon.querySelectorAll(".prichute__nazev, .prichute__popis, .prichute__druh"),
+        { y: 16, opacity: 0, duration: .45, stagger: .05, ease: "power2.out" });
     };
 
     bubliny.forEach(li => {
