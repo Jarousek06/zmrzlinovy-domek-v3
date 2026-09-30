@@ -330,8 +330,11 @@
     addEventListener("resize", rozmisti);
 
     let aktivni = null;
+    let rozlevaSe = false;   // běží přelití barvy → další výběr počká, nic se nepřekrývá (jinak barvy blikají)
+    let dalsi = null;
     const vyber = (li, hned) => {
-      if (li === aktivni) return;
+      if (li === aktivni) { dalsi = null; return; }
+      if (rozlevaSe && !hned) { dalsi = li; return; }
       const b = li.querySelector("button");
       const barva = b.dataset.c;
       bubliny.forEach(x => x.classList.toggle("is-on", x === li));
@@ -347,13 +350,14 @@
           fotka.src = b.dataset.img;
           fotka.alt = b.dataset.name;
         } else {
+          gsap.killTweensOf(fotka);
           gsap.to(fotka, {
-            scale: .82, opacity: 0, rotate: -8, duration: .22, ease: "power2.in",
+            scale: .86, opacity: 0, rotate: -6, duration: .2, ease: "power2.in",
             onComplete: () => {
               fotka.src = b.dataset.img;
               fotka.alt = b.dataset.name;
-              gsap.fromTo(fotka, { scale: .82, opacity: 0, rotate: 10 },
-                { scale: 1, opacity: 1, rotate: 0, duration: .5, ease: "back.out(1.7)" });
+              gsap.fromTo(fotka, { scale: .86, opacity: 0, rotate: 8 },
+                { scale: 1, opacity: 1, rotate: 0, duration: .55, ease: "back.out(1.5)" });
             },
           });
         }
@@ -370,19 +374,34 @@
         Math.hypot(x, y), Math.hypot(rs.width - x, y),
         Math.hypot(x, rs.height - y), Math.hypot(rs.width - x, rs.height - y)
       );
+      rozlevaSe = true;
       gsap.set(flood, { backgroundColor: barva, left: x - 5, top: y - 5, scale: 0, opacity: 1 });
       gsap.to(flood, {
-        scale: dosah / 5 + 2, duration: .85, ease: "power3.inOut",
-        onComplete: () => { sekceP.style.setProperty("--flavor", barva); gsap.set(flood, { scale: 0, opacity: 0 }); },
+        scale: dosah / 5 + 2, duration: .7, ease: "power3.inOut",
+        onComplete: () => {
+          // nejdřív se podklad přebarví, až pak kruh zmizí — bez okamžiku, kdy by byla vidět stará barva
+          sekceP.style.setProperty("--flavor", barva);
+          requestAnimationFrame(() => {
+            gsap.set(flood, { scale: 0, opacity: 0 });
+            rozlevaSe = false;
+            if (dalsi) { const n = dalsi; dalsi = null; vyber(n); }
+          });
+        },
       });
       gsap.fromTo([jmeno, popis, druh], { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: .45, stagger: .05, ease: "power2.out", overwrite: true });
     };
 
+    let umysl;
     bubliny.forEach(li => {
       const b = li.querySelector("button");
-      b.addEventListener("click", () => vyber(li));
-      if (matchMedia("(hover: hover)").matches) b.addEventListener("pointerenter", () => vyber(li));
+      b.addEventListener("click", () => { clearTimeout(umysl); vyber(li); });
+      if (matchMedia("(hover: hover)").matches) {
+        // hover vybere až když myš na bublině chvíli zůstane — přejetí přes celý oblouk nerozbliká sekci
+        b.addEventListener("pointerenter", () => { clearTimeout(umysl); umysl = setTimeout(() => vyber(li), 170); });
+        b.addEventListener("pointerleave", () => clearTimeout(umysl));
+      }
       b.addEventListener("focus", () => vyber(li));
+      if (b.dataset.img) { const p = new Image(); p.src = b.dataset.img; }   // předem načtené fotky, ať se při výměně neukáže prázdno
     });
     vyber(bubliny[0], true);
 

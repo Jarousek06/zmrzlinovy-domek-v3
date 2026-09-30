@@ -125,7 +125,8 @@ section[id] { scroll-margin-top: 84px; }
 /* rychlá fakta pod úvodem */
 .facts { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin: clamp(38px, 6vw, 70px) auto 0; padding-bottom: clamp(28px, 4vw, 56px); position: relative; z-index: 2; }
 .facts li { background: var(--white); border-radius: 22px; padding: 20px 22px; box-shadow: var(--soft); }
-.facts__ico { font-size: 1.5rem; display: block; margin-bottom: 6px; }
+.facts__ico { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; margin-bottom: 10px; background: color-mix(in srgb, var(--pink) 38%, var(--white)); color: var(--ink); }
+.facts__ico svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
 .facts b { display: block; font-size: 1.05rem; }
 .facts em { font-style: normal; font-size: .88rem; color: var(--ink-2); }
 
@@ -322,6 +323,13 @@ section[id] { scroll-margin-top: 84px; }
 @media (max-width: 620px) {
   body { font-size: 16px; }
   .grid4, .facts, .ticks { grid-template-columns: 1fr; }
+  .grid4 { gap: 14px; }
+  .grid4 .card { display: grid; grid-template-columns: 38% 1fr; column-gap: 16px; align-items: center; padding: 12px; border-radius: 24px; }
+  .grid4 .card__img { grid-row: 1 / span 3; margin-bottom: 0; border-radius: 16px; align-self: stretch; }
+  .grid4 .card__img img { height: 100%; aspect-ratio: 3 / 4; }
+  .grid4 .card .sticker--price { justify-self: start; margin-bottom: 6px; }
+  .grid4 .card h3 { font-size: 1.22rem; margin-bottom: 4px; }
+  .grid4 .card p { font-size: .92rem; }
   .gallery__track { justify-content: flex-start; overflow-x: auto; scroll-snap-type: x mandatory; }
   .gallery figure { flex-basis: 190px; scroll-snap-align: center; }
   .gallery__hint { display: none; }
@@ -412,7 +420,7 @@ section[id] { scroll-margin-top: 84px; }
   transition: background-color .01s;
 }
 /* kruh, který při výběru vyjede z bubliny a přebarví celou sekci */
-.flavors__flood { position: absolute; z-index: -1; width: 10px; height: 10px; border-radius: 50%; transform: scale(0); pointer-events: none; }
+.flavors__flood { position: absolute; z-index: -1; width: 10px; height: 10px; border-radius: 50%; transform: scale(0); pointer-events: none; will-change: transform; backface-visibility: hidden; }
 .flavors__in { position: relative; z-index: 1; }
 
 .flavors__title {
