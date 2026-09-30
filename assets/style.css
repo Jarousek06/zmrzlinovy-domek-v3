@@ -413,7 +413,9 @@ section[id] { scroll-margin-top: 84px; }
 
 /* ---------- Vyber si příchuť (bubliny v oblouku, barva se rozlije sekcí) ---------- */
 .flavors {
-  --flavor: #E0445A;
+  --flavor: #D2334A;
+  --onflavor: #fff;      /* barva textu na příchuti */
+  --onflavor-inv: #3A2A31;
   position: relative; isolation: isolate; overflow: hidden;
   padding: clamp(56px, 8vw, 104px) 0 clamp(64px, 9vw, 120px);
   background: var(--flavor);
@@ -425,31 +427,30 @@ section[id] { scroll-margin-top: 84px; }
 
 .flavors__title {
   font-size: clamp(2.6rem, 8.6vw, 7.2rem); line-height: 1.02; letter-spacing: -.03em;
-  color: var(--white); margin: 0;
-  text-shadow: 0 10px 30px rgba(58, 42, 49, .18);
+  color: var(--onflavor); margin: 0;
 }
-.flavors__title .hand { color: var(--white); font-size: 1.16em; }
-.flavors__sub { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 24px; margin: 16px 0 clamp(28px, 5vw, 54px); color: var(--white); font-weight: 900; font-size: .78rem; letter-spacing: .2em; text-transform: uppercase; opacity: .9; }
+.flavors__title .hand { color: var(--onflavor); font-size: 1.16em; }
+.flavors__sub { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 24px; margin: 16px 0 clamp(28px, 5vw, 54px); color: var(--onflavor); font-weight: 900; font-size: .78rem; letter-spacing: .2em; text-transform: uppercase; opacity: .9; }
 
 .flavors__body { display: grid; grid-template-columns: auto 1fr auto; gap: clamp(20px, 3vw, 48px); align-items: center; }
 .flavors__shot { margin: 0; width: min(290px, 26vw); aspect-ratio: 1; display: grid; place-items: center; }
 .flavors__shot img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 22px 26px rgba(58, 42, 49, .38)); }
-.flavors__now { color: var(--white); max-width: 26em; }
-.flavors__now .kicker { color: var(--white); opacity: .8; }
-.flavors__name { display: block; font-size: clamp(3rem, 7vw, 5.6rem); line-height: 1; color: var(--white); margin: 0 0 12px; }
-.flavors__note { font-size: 1.12rem; color: var(--white); opacity: .92; margin-bottom: 22px; min-height: 3.2em; }
-.flavors__now .btn--dark { background: var(--white); color: var(--ink); }
+.flavors__now { color: var(--onflavor); max-width: 26em; }
+.flavors__now .kicker { color: var(--onflavor); opacity: .82; }
+.flavors__name { display: block; font-size: clamp(3rem, 7vw, 5.6rem); line-height: 1; color: var(--onflavor); margin: 0 0 12px; }
+.flavors__note { font-size: 1.12rem; color: var(--onflavor); opacity: .92; margin-bottom: 22px; min-height: 3.2em; }
+.flavors__now .btn--dark { background: var(--onflavor); color: var(--onflavor-inv); }
 
 /* bubliny poskládané do oblouku */
 .bubbles { list-style: none; margin: 0; padding: 0; position: relative; width: min(420px, 46vw); aspect-ratio: 1; }
 .bubbles::before {
   content: ""; position: absolute; inset: 6%; border-radius: 50%;
-  border: 2px dashed rgba(255, 255, 255, .55);
+  border: 2px dashed color-mix(in srgb, var(--onflavor) 55%, transparent);
 }
 .bubbles li { position: absolute; left: 50%; top: 50%; margin: -44px 0 0 -44px; }
 .bubbles button {
   --in: 1;   /* nájezdová animace; výběr a hover se s ní násobí, aby se nepraly */
-  width: 88px; height: 88px; border-radius: 50%; border: 4px solid var(--white); cursor: pointer;
+  width: 88px; height: 88px; border-radius: 50%; border: 4px solid var(--onflavor); cursor: pointer;
   background: var(--c); padding: 0; display: grid; place-items: center;
   box-shadow: 0 18px 30px -16px rgba(58, 42, 49, .55);
   transform: scale(var(--in));
@@ -457,7 +458,9 @@ section[id] { scroll-margin-top: 84px; }
 }
 .bubbles button img { width: 72%; height: 72%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .3)); pointer-events: none; }
 .bubbles button:hover, .bubbles button:focus-visible { transform: scale(calc(var(--in) * 1.14)); }
-.bubbles li.is-on button { transform: scale(calc(var(--in) * 1.22)); box-shadow: 0 0 0 8px rgba(255, 255, 255, .28), 0 20px 34px -14px rgba(58, 42, 49, .6); }
+/* obrys při procházení Tabem musí být vidět na každé příchuti */
+.flavors :focus-visible { outline: 3px solid var(--onflavor); outline-offset: 4px; }
+.bubbles li.is-on button { transform: scale(calc(var(--in) * 1.22)); box-shadow: 0 0 0 8px color-mix(in srgb, var(--onflavor) 30%, transparent), 0 20px 34px -14px rgba(58, 42, 49, .6); }
 
 @media (max-width: 980px) {
   .flavors__body { grid-template-columns: 1fr; justify-items: center; text-align: center; }

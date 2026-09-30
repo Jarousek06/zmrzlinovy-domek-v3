@@ -340,6 +340,18 @@
       bubliny.forEach(x => x.classList.toggle("is-on", x === li));
       aktivni = li;
 
+      // na světlé příchuti (vanilka, jahoda) musí být text tmavý, jinak je nečitelný
+      const svetlost = (() => {
+        const kanal = barva.slice(1).match(/\w\w/g).map(h => {
+          const v = parseInt(h, 16) / 255;
+          return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4);
+        });
+        return .2126 * kanal[0] + .7152 * kanal[1] + .0722 * kanal[2];
+      })();
+      const tmavy = svetlost > .32;
+      sekceP.style.setProperty("--onflavor", tmavy ? "#3A2A31" : "#ffffff");
+      sekceP.style.setProperty("--onflavor-inv", tmavy ? "#ffffff" : "#3A2A31");
+
       jmeno.textContent = b.dataset.name;
       druh.textContent = b.dataset.kind;
       popis.textContent = b.dataset.note;
