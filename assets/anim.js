@@ -1,15 +1,16 @@
-/* Pohyb: GSAP + ScrollTrigger + MotionPath + Draggable, plynulý scroll Lenis.
-   Dobrovolná vrstva — bez knihoven (nebo s vypnutými animacemi) zůstane web statický. */
+/* Pohyb webu — GSAP + ScrollTrigger + MotionPath + Draggable, plynulý scroll Lenis.
+   Celé je to nadstavba: bez knihoven (nebo s vypnutými animacemi v systému)
+   zůstane web statický a plně čitelný. */
 (function () {
   const gsap = window.gsap;
   if (!gsap || !window.ScrollTrigger) return;
   gsap.registerPlugin(window.ScrollTrigger, window.MotionPathPlugin, window.Draggable);
   const ST = window.ScrollTrigger;
-  const lessMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const mene = matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.documentElement.classList.add("js-anim");
 
   /* ---- plynulý scroll ---- */
-  if (window.Lenis && !lessMotion) {
+  if (window.Lenis && !mene) {
     const lenis = new window.Lenis({ duration: 1.05, smoothWheel: true });
     window.lenis = lenis;
     lenis.on("scroll", ST.update);
@@ -20,35 +21,34 @@
       const cil = id === "#top" ? 0 : document.querySelector(id);
       if (cil === null) return;
       e.preventDefault();
-      lenis.scrollTo(cil, { offset: cil === 0 ? 0 : -86 });
+      lenis.scrollTo(cil, { offset: cil === 0 ? 0 : -70 });
     }));
   }
 
   /* ---- nadpisy: skládání po slovech / písmenech ---- */
   function rozlozit(el, po) {
     const kusy = [];
-    const maskaZ = znak => {
-      const maska = document.createElement("span");
-      maska.className = "sp";
-      const vnitrek = document.createElement("span");
-      vnitrek.className = "sp__i";
-      vnitrek.textContent = znak;
-      maska.appendChild(vnitrek);
-      kusy.push(vnitrek);
-      return maska;
+    const maska = znak => {
+      const m = document.createElement("span");
+      m.className = "sp";
+      const v = document.createElement("span");
+      v.className = "sp__i";
+      v.textContent = znak;
+      m.appendChild(v);
+      kusy.push(v);
+      return m;
     };
     const obal = uzel => {
       const frag = document.createDocumentFragment();
-      // slova držíme pohromadě, ať se nadpis nezlomí uprostřed slova
       for (const slovo of uzel.textContent.split(/(\s+)/)) {
         if (!slovo.trim()) { frag.appendChild(document.createTextNode(slovo)); continue; }
         if (po === "chars") {
-          const obalSlova = document.createElement("span");
-          obalSlova.className = "spw";
-          [...slovo].forEach(z => obalSlova.appendChild(maskaZ(z)));
-          frag.appendChild(obalSlova);
+          const w = document.createElement("span");
+          w.className = "spw";
+          [...slovo].forEach(z => w.appendChild(maska(z)));
+          frag.appendChild(w);
         } else {
-          frag.appendChild(maskaZ(slovo));
+          frag.appendChild(maska(slovo));
         }
       }
       uzel.replaceWith(frag);
@@ -62,38 +62,38 @@
 
   document.querySelectorAll("[data-reveal]").forEach(el => {
     const kusy = rozlozit(el, el.dataset.reveal);
-    if (!kusy.length || lessMotion) return;
+    if (!kusy.length || mene) return;
     gsap.from(kusy, {
-      yPercent: 120, rotate: 5, opacity: 0, duration: .85, ease: "back.out(1.6)",
-      stagger: el.dataset.reveal === "chars" ? .03 : .055,
+      yPercent: 118, rotate: 4, opacity: 0, duration: .8, ease: "back.out(1.6)",
+      stagger: el.dataset.reveal === "chars" ? .028 : .05,
       scrollTrigger: { trigger: el, start: "top 90%", once: true },
     });
   });
 
   /* ---- vynoření bloků ---- */
-  if (!lessMotion) [".card", ".ticket", ".quotes blockquote", ".pricelist li", ".ticks li", ".gallery figure"].forEach(sel => {
+  if (!mene) [".polozka", ".misto", ".citace__mrizka blockquote", ".polaroidy figure", ".fakta li", ".ceny li", ".odrazky li", ".dotazy details"].forEach(sel => {
     const prvky = gsap.utils.toArray(sel);
     if (!prvky.length) return;
     gsap.from(prvky, {
-      y: 46, opacity: 0, duration: .7, ease: "power3.out", stagger: .08,
-      scrollTrigger: { trigger: prvky[0].parentElement, start: "top 85%", once: true },
+      y: 40, opacity: 0, duration: .65, ease: "power3.out", stagger: .07, immediateRender: false,
+      scrollTrigger: { trigger: prvky[0].parentElement, start: "top 86%", once: true },
     });
   });
 
-  /* ---- parallax ---- */
-  if (!lessMotion) {
-    gsap.to(".hero__art", { y: -60, ease: "none", scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: .6 } });
-    gsap.utils.toArray(".card__img img").forEach(img => {
-      gsap.fromTo(img, { y: -12 }, { y: 12, ease: "none", scrollTrigger: { trigger: img, start: "top bottom", end: "bottom top", scrub: .8 } });
+  /* ---- parallax fotek ---- */
+  if (!mene) {
+    gsap.to(".uvod__foto", { y: -50, ease: "none", scrollTrigger: { trigger: ".blok--uvod", start: "top top", end: "bottom top", scrub: .6 } });
+    gsap.utils.toArray(".polozka__foto img").forEach(img => {
+      gsap.fromTo(img, { y: -10 }, { y: 10, ease: "none", scrollTrigger: { trigger: img, start: "top bottom", end: "bottom top", scrub: .8 } });
     });
   }
 
-  /* ---- pás příchutí: rychlost podle scrollu ---- */
+  /* ---- běžící pás zrychluje podle scrollu ---- */
   const pas = document.getElementById("bandTrack");
-  if (pas && !lessMotion) {
+  if (pas && !mene) {
     pas.parentElement.classList.add("is-js");
     const sirka = pas.scrollWidth / 2;
-    const jizda = gsap.to(pas, { x: -sirka, duration: sirka / 65, ease: "none", repeat: -1 });
+    const jizda = gsap.to(pas, { x: -sirka, duration: sirka / 62, ease: "none", repeat: -1 });
     let zpomal;
     ST.create({
       onUpdate: self => {
@@ -104,103 +104,208 @@
     });
   }
 
-  /* ---- plovoucí posyp v hlavičce ---- */
+  /* ---- plovoucí posyp v úvodu ---- */
   const hriste = document.getElementById("floaties");
-  if (hriste && !lessMotion) {
+  if (hriste && !mene) {
     const tvary = [
-      '<svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="20" rx="3" fill="%C" stroke="%232B1620" stroke-width="2"/></svg>',
-      '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="%C" stroke="%232B1620" stroke-width="2"/></svg>',
-      '<svg viewBox="0 0 24 24"><path d="M12 3c4 6 7 9 7 12.5a7 7 0 0 1-14 0C5 12 8 9 12 3z" fill="%C" stroke="%232B1620" stroke-width="2"/></svg>',
+      '<svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="20" rx="3" fill="%C"/></svg>',
+      '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="%C"/></svg>',
+      '<svg viewBox="0 0 24 24"><path d="M12 3c4 6 7 9 7 12.5a7 7 0 0 1-14 0C5 12 8 9 12 3z" fill="%C"/></svg>',
     ];
-    const barvy = ["#F4A3B4", "#A8C66C", "#F2D45C", "#E85C86", "#8FD3E8", "#C98F4E"];
-    const prvky = [];
-    for (let i = 0; i < 13; i++) {
+    const barvy = ["%23fff", "%23A8C66C", "%23F2D45C", "%23D2334A", "%236B4430", "%23FFF3E6"];
+    const kusy = [];
+    for (let i = 0; i < 12; i++) {
       const s = document.createElement("span");
       s.className = "floatie";
-      s.innerHTML = tvary[i % tvary.length].replace("%C", encodeURIComponent(barvy[i % barvy.length]));
+      s.innerHTML = tvary[i % tvary.length].replace("%C", barvy[i % barvy.length]);
       s.style.left = (4 + Math.random() * 92) + "%";
-      s.style.top = (12 + Math.random() * 76) + "%";
-      s.style.width = (12 + Math.random() * 16) + "px";
+      s.style.top = (12 + Math.random() * 74) + "%";
+      s.style.width = (11 + Math.random() * 15) + "px";
       hriste.appendChild(s);
-      prvky.push(s);
+      kusy.push(s);
     }
     const mezi = (a, b) => a + Math.random() * (b - a);
     const letet = el => {
       gsap.set(el, { opacity: 0, scale: .4, rotate: mezi(-40, 40) });
-      const tl = gsap.timeline({ onComplete: () => gsap.delayedCall(mezi(.4, 3), () => letet(el)) });
       const doba = mezi(3.2, 5.2);
+      const tl = gsap.timeline({ onComplete: () => gsap.delayedCall(mezi(.4, 3), () => letet(el)) });
       tl.to(el, { opacity: .9, scale: 1, duration: .5, ease: "power2.out" })
-        .to(el, { y: -mezi(70, 180), duration: doba * .45, ease: "power2.out" }, 0)
+        .to(el, { y: -mezi(70, 170), duration: doba * .45, ease: "power2.out" }, 0)
         .to(el, { y: 0, duration: doba * .55, ease: "power2.in" }, doba * .45)
-        .to(el, { x: mezi(-80, 80), duration: doba, ease: "sine.inOut" }, 0)
-        .to(el, { rotate: `+=${mezi(-200, 200)}`, duration: doba, ease: "none" }, 0)
+        .to(el, { x: mezi(-70, 70), duration: doba, ease: "sine.inOut" }, 0)
+        .to(el, { rotate: `+=${mezi(-180, 180)}`, duration: doba, ease: "none" }, 0)
         .to(el, { opacity: 0, scale: .5, duration: .6, ease: "power2.in" }, doba - .6);
       el._tl = tl;
     };
-    prvky.forEach((el, i) => gsap.delayedCall(i * .28, () => letet(el)));
+    kusy.forEach((el, i) => gsap.delayedCall(i * .3, () => letet(el)));
     document.addEventListener("visibilitychange", () => {
-      prvky.forEach(el => el._tl && (document.hidden ? el._tl.pause() : el._tl.resume()));
+      kusy.forEach(el => el._tl && (document.hidden ? el._tl.pause() : el._tl.resume()));
     });
   }
 
-  /* ---- lesk na kartách podle myši ---- */
-  document.querySelectorAll("[data-glare]").forEach(card => {
-    card.addEventListener("pointermove", e => {
-      const r = card.getBoundingClientRect();
-      card.style.setProperty("--gx", ((e.clientX - r.left) / r.width * 100) + "%");
-      card.style.setProperty("--gy", ((e.clientY - r.top) / r.height * 100) + "%");
-      card.style.setProperty("--go", ".7");
+  /* ---- lesk na kartách a magnetická tlačítka ---- */
+  document.querySelectorAll("[data-glare]").forEach(k => {
+    k.addEventListener("pointermove", e => {
+      const r = k.getBoundingClientRect();
+      k.style.setProperty("--gx", ((e.clientX - r.left) / r.width * 100) + "%");
+      k.style.setProperty("--gy", ((e.clientY - r.top) / r.height * 100) + "%");
+      k.style.setProperty("--go", ".65");
     });
-    card.addEventListener("pointerleave", () => card.style.setProperty("--go", "0"));
+    k.addEventListener("pointerleave", () => k.style.setProperty("--go", "0"));
   });
 
-  /* ---- magnetická tlačítka ---- */
-  if (!lessMotion && matchMedia("(hover: hover)").matches) {
-    document.querySelectorAll("[data-magnetic]").forEach(btn => {
-      const posun = gsap.quickTo(btn, "x", { duration: .4, ease: "power3" });
-      const posunY = gsap.quickTo(btn, "y", { duration: .4, ease: "power3" });
-      btn.addEventListener("pointermove", e => {
-        const r = btn.getBoundingClientRect();
-        posun((e.clientX - r.left - r.width / 2) * .25);
-        posunY((e.clientY - r.top - r.height / 2) * .35);
+  if (!mene && matchMedia("(hover: hover)").matches) {
+    document.querySelectorAll("[data-magnetic]").forEach(b => {
+      const x = gsap.quickTo(b, "x", { duration: .4, ease: "power3" });
+      const y = gsap.quickTo(b, "y", { duration: .4, ease: "power3" });
+      b.addEventListener("pointermove", e => {
+        const r = b.getBoundingClientRect();
+        x((e.clientX - r.left - r.width / 2) * .22);
+        y((e.clientY - r.top - r.height / 2) * .3);
       });
-      btn.addEventListener("pointerleave", () => { posun(0); posunY(0); });
+      b.addEventListener("pointerleave", () => { x(0); y(0); });
     });
   }
 
-  /* ---- cesta k domku ---- */
-  const stage = document.getElementById("journeyStage");
+  /* ---- nálepky: plácnutí při příchodu ---- */
+  if (!mene) gsap.utils.toArray(".sticker").forEach(n => {
+    const rot = parseFloat(getComputedStyle(n).getPropertyValue("--rot")) || 0;
+    gsap.from(n, {
+      scale: .5, opacity: 0, rotate: rot - 14, duration: .6, ease: "back.out(2.4)", immediateRender: false,
+      scrollTrigger: { trigger: n.parentElement, start: "top 88%", once: true },
+    });
+  });
+
+  /* ---- VYBER SI PŘÍCHUŤ: barva se přelije celou sekcí ---- */
+  const sekce = document.getElementById("prichute");
+  const bubliny = sekce && [...sekce.querySelectorAll(".bubliny li")];
+  if (sekce && bubliny && bubliny.length) {
+    const flood = document.getElementById("flood");
+    const jmeno = document.getElementById("flavorName");
+    const druh = document.getElementById("flavorKind");
+    const popis = document.getElementById("flavorNote");
+    const fotka = document.getElementById("flavorImg");
+    const kruh = sekce.querySelector(".bubliny");
+
+    const rozmisti = () => {
+      const R = kruh.clientWidth / 2 - 6;
+      bubliny.forEach((li, i) => {
+        const uhel = (-108 + i * 43) * Math.PI / 180;
+        li.style.transform = `translate(${(Math.cos(uhel) * R).toFixed(1)}px, ${(Math.sin(uhel) * R).toFixed(1)}px)`;
+      });
+    };
+    rozmisti();
+    addEventListener("resize", rozmisti);
+
+    // na světlé příchuti musí být tmavý text, jinak je nečitelný
+    const svetla = hex => {
+      const k = hex.replace("#", "").match(/\w\w/g).map(h => {
+        const v = parseInt(h, 16) / 255;
+        return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4);
+      });
+      return .2126 * k[0] + .7152 * k[1] + .0722 * k[2] > .32;
+    };
+
+    let aktivni = null, umysl;
+    const vyber = (li, hned) => {
+      if (li === aktivni) return;
+      const b = li.querySelector("button");
+      const barva = b.dataset.c;
+      bubliny.forEach(x => x.classList.toggle("is-on", x === li));
+      aktivni = li;
+
+      jmeno.textContent = b.dataset.name;
+      druh.textContent = b.dataset.kind;
+      popis.textContent = b.dataset.note;
+      sekce.style.setProperty("--text", svetla(barva) ? "#3A2A31" : "#ffffff");
+
+      if (mene || hned) {
+        sekce.style.setProperty("--barva", barva);
+      } else {
+        const rs = sekce.getBoundingClientRect(), rb = b.getBoundingClientRect();
+        const x = rb.left + rb.width / 2 - rs.left, y = rb.top + rb.height / 2 - rs.top;
+        const dosah = Math.max(
+          Math.hypot(x, y), Math.hypot(rs.width - x, y),
+          Math.hypot(x, rs.height - y), Math.hypot(rs.width - x, rs.height - y)
+        );
+        gsap.killTweensOf(flood);
+        gsap.set(flood, { backgroundColor: barva, left: x - 5, top: y - 5, scale: 0, opacity: 1 });
+        gsap.to(flood, {
+          scale: dosah / 5 + 2, duration: .8, ease: "power3.inOut",
+          onComplete: () => { sekce.style.setProperty("--barva", barva); gsap.set(flood, { scale: 0, opacity: 0 }); },
+        });
+        gsap.fromTo([jmeno, popis, druh], { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: .4, stagger: .04, ease: "power2.out", overwrite: true });
+      }
+
+      if (fotka && b.dataset.img) {
+        if (mene || hned) {
+          fotka.src = b.dataset.img;
+          fotka.alt = b.dataset.name;
+        } else {
+          gsap.to(fotka, {
+            scale: .82, opacity: 0, rotate: -8, duration: .2, ease: "power2.in", overwrite: true,
+            onComplete: () => {
+              fotka.src = b.dataset.img;
+              fotka.alt = b.dataset.name;
+              gsap.fromTo(fotka, { scale: .82, opacity: 0, rotate: 10 }, { scale: 1, opacity: 1, rotate: 0, duration: .5, ease: "back.out(1.7)" });
+            },
+          });
+        }
+      }
+    };
+
+    bubliny.forEach(li => {
+      const b = li.querySelector("button");
+      b.addEventListener("click", () => { clearTimeout(umysl); vyber(li); });
+      if (matchMedia("(hover: hover)").matches) {
+        // hover vybírá se zpožděním, aby přejetí přes oblouk sekci nerozblikalo
+        b.addEventListener("pointerenter", () => { clearTimeout(umysl); umysl = setTimeout(() => vyber(li), 170); });
+        b.addEventListener("pointerleave", () => clearTimeout(umysl));
+      }
+      b.addEventListener("focus", () => vyber(li));
+      if (b.dataset.img) { const p = new Image(); p.src = b.dataset.img; }
+    });
+    vyber(bubliny[0], true);
+
+    if (!mene) gsap.fromTo(bubliny.map(li => li.querySelector("button")),
+      { "--in": 0, opacity: 0 },
+      { "--in": 1, opacity: 1, duration: .55, ease: "back.out(2)", stagger: .06, immediateRender: false,
+        scrollTrigger: { trigger: sekce, start: "top 78%", once: true } });
+  }
+
+  /* ---- CESTA: kornout jede po trase ---- */
+  const scena = document.getElementById("journeyStage");
   const draha = document.getElementById("routePath");
   const kornout = document.getElementById("travelCone");
-  const zastavky = gsap.utils.toArray(".stop");
+  const zastavky = gsap.utils.toArray(".zastavka");
 
-  if (stage && draha && kornout) {
+  if (scena && draha && kornout) {
     const delka = draha.getTotalLength();
     const nakreslena = document.getElementById("routeDrawn");
     gsap.set(nakreslena, { strokeDasharray: delka, strokeDashoffset: delka });
 
     const posadit = () => {
-      const mapa = stage.querySelector(".journey__map").getBoundingClientRect();
+      const mapa = scena.querySelector(".mapa__svg").getBoundingClientRect();
       const mer = Math.min(mapa.width / 1200, mapa.height / 640);
-      const posunX = (mapa.width - 1200 * mer) / 2, posunY = (mapa.height - 640 * mer) / 2;
+      const px = (mapa.width - 1200 * mer) / 2, py = (mapa.height - 640 * mer) / 2;
       zastavky.forEach(z => {
         const bod = draha.getPointAtLength(delka * parseFloat(z.dataset.t));
-        z.style.left = (posunX + bod.x * mer) + "px";
-        z.style.top = (posunY + bod.y * mer) + "px";
+        z.style.left = (px + bod.x * mer) + "px";
+        z.style.top = (py + bod.y * mer) + "px";
       });
     };
 
     const mm = gsap.matchMedia();
 
     mm.add("(min-width: 981px)", () => {
-      stage.classList.add("is-map");
+      scena.classList.add("is-map");
       posadit();
       addEventListener("resize", posadit);
 
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: stage, start: "center center", end: "+=" + Math.round(innerHeight * 1.5),
-          scrub: .8, pin: !lessMotion, anticipatePin: 1,
+          trigger: scena, start: "center center", end: "+=" + Math.round(innerHeight * 1.4),
+          scrub: .8, pin: !mene, anticipatePin: 1,
           onUpdate: self => zastavky.forEach(z => z.classList.toggle("is-on", self.progress >= parseFloat(z.dataset.t) - .04)),
         },
       });
@@ -209,7 +314,7 @@
 
       return () => {
         removeEventListener("resize", posadit);
-        stage.classList.remove("is-map");
+        scena.classList.remove("is-map");
         zastavky.forEach(z => { z.style.left = z.style.top = ""; z.classList.remove("is-on"); });
       };
     });
@@ -222,7 +327,7 @@
   /* ---- galerie k tažení ---- */
   const pasFotek = document.getElementById("galleryTrack");
   if (pasFotek && window.Draggable && innerWidth > 980) {
-    gsap.utils.toArray(".gallery figure").forEach(f => {
+    gsap.utils.toArray(".polaroidy figure").forEach(f => {
       f.dataset.r = (getComputedStyle(f).getPropertyValue("--r").trim() || "0deg").replace("deg", "");
     });
     window.Draggable.create(pasFotek, {
@@ -234,59 +339,33 @@
     });
   }
 
-  /* ---- nálepky: plácnutí při příchodu + odlepování rohu se scrollem ---- */
-  const nalepky = gsap.utils.toArray(".sticker");
-  if (nalepky.length && !lessMotion) {
-    nalepky.forEach(n => {
-      const rot = getComputedStyle(n).getPropertyValue("--rot").trim() || "0deg";
-      gsap.from(n, {
-        scale: .5, opacity: 0, rotate: parseFloat(rot) - 14, duration: .6, ease: "back.out(2.4)",
-        scrollTrigger: { trigger: n.parentElement, start: "top 88%", once: true },
-      });
-      ST.create({
-        trigger: n.parentElement, start: "top 85%", end: "bottom 35%", scrub: .6,
-        onUpdate: self => n.style.setProperty("--peel", (Math.sin(self.progress * Math.PI) * .9).toFixed(3)),
-      });
-    });
-  }
-
   /* ---- skákající ovoce nad patičkou ---- */
   const sad = document.getElementById("fruitfield");
-  if (sad && !lessMotion) {
+  if (sad && !mene) {
     const OVOCE = {
       malina: '<svg viewBox="0 0 48 48"><g fill="#D6336C"><circle cx="24" cy="20" r="6"/><circle cx="17" cy="26" r="6"/><circle cx="31" cy="26" r="6"/><circle cx="24" cy="32" r="6"/></g><path d="M24 14c-3-4-8-4-10-2 3 1 5 3 6 6z" fill="#5C9E4A"/></svg>',
       jahoda: '<svg viewBox="0 0 48 48"><path d="M24 12c9 0 14 6 14 13s-7 13-14 13-14-6-14-13 5-13 14-13z" fill="#E63946"/><g fill="#fff"><circle cx="19" cy="22" r="1.4"/><circle cx="28" cy="21" r="1.4"/><circle cx="24" cy="28" r="1.4"/><circle cx="31" cy="28" r="1.4"/><circle cx="17" cy="30" r="1.4"/></g><path d="M24 12c-4-3-9-3-11 0 3 0 6 1 8 3 2-2 5-3 8-3-2-2-4-2-5 0z" fill="#5C9E4A"/></svg>',
-      mango: '<svg viewBox="0 0 48 48"><path d="M32 12c7 2 9 12 4 20s-16 10-20 4 0-18 8-22c3-1.5 6-2.5 8-2z" fill="#F2A03D"/><path d="M33 14c4 4 4 13-1 19" stroke="#E2732C" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M31 11c1-3 4-4 6-3-1 2-2 3-4 4z" fill="#5C9E4A"/></svg>',
-      citron: '<svg viewBox="0 0 48 48"><ellipse cx="24" cy="24" rx="15" ry="11" fill="#F6D33C" transform="rotate(-18 24 24)"/><path d="M38 17c2-1 3 0 3 1s-2 2-3 1z" fill="#E9B824"/><path d="M10 31c-2 1-3 0-3-1s2-2 3-1z" fill="#E9B824"/></svg>',
-      boruvka: '<svg viewBox="0 0 48 48"><circle cx="24" cy="26" r="12" fill="#4C5BAF"/><path d="M24 14l4 4-4 3-4-3z" fill="#2F3C86"/><circle cx="20" cy="22" r="2.4" fill="#7B87CC" opacity=".8"/></svg>',
+      mango: '<svg viewBox="0 0 48 48"><path d="M32 12c7 2 9 12 4 20s-16 10-20 4 0-18 8-22c3-1.5 6-2.5 8-2z" fill="#F2A03D"/><path d="M33 14c4 4 4 13-1 19" stroke="#E2732C" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>',
+      citron: '<svg viewBox="0 0 48 48"><ellipse cx="24" cy="24" rx="15" ry="11" fill="#F6D33C" transform="rotate(-18 24 24)"/></svg>',
+      boruvka: '<svg viewBox="0 0 48 48"><circle cx="24" cy="26" r="12" fill="#4C5BAF"/><path d="M24 14l4 4-4 3-4-3z" fill="#2F3C86"/></svg>',
       visne: '<svg viewBox="0 0 48 48"><path d="M24 8c-4 6-10 8-12 12" stroke="#5C9E4A" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M24 8c3 7 8 9 11 12" stroke="#5C9E4A" stroke-width="2.6" fill="none" stroke-linecap="round"/><circle cx="12" cy="32" r="8" fill="#B8263C"/><circle cx="35" cy="32" r="8" fill="#D6334F"/></svg>',
-      skorice: '<svg viewBox="0 0 48 48"><rect x="8" y="18" width="32" height="12" rx="6" fill="#A2652F"/><rect x="8" y="18" width="32" height="12" rx="6" fill="none" stroke="#7E4A1E" stroke-width="2"/><path d="M14 18v12M20 18v12M26 18v12M32 18v12" stroke="#7E4A1E" stroke-width="1.4" opacity=".7"/></svg>',
-      pistacie: '<svg viewBox="0 0 48 48"><ellipse cx="24" cy="24" rx="12" ry="9" fill="#C9AE7B" transform="rotate(-14 24 24)"/><path d="M14 22c6-3 14-3 20 0" stroke="#A88D5C" stroke-width="2" fill="none"/><ellipse cx="24" cy="25" rx="6" ry="4" fill="#8FBF58" transform="rotate(-14 24 25)"/></svg>',
+      skorice: '<svg viewBox="0 0 48 48"><rect x="8" y="18" width="32" height="12" rx="6" fill="#A2652F"/><path d="M14 18v12M20 18v12M26 18v12M32 18v12" stroke="#7E4A1E" stroke-width="1.4" opacity=".7"/></svg>',
+      pistacie: '<svg viewBox="0 0 48 48"><ellipse cx="24" cy="24" rx="12" ry="9" fill="#C9AE7B" transform="rotate(-14 24 24)"/><ellipse cx="24" cy="25" rx="6" ry="4" fill="#8FBF58" transform="rotate(-14 24 25)"/></svg>',
     };
-    const jmena = Object.keys(OVOCE);
     const kusy = [];
-    const sirka = () => sad.clientWidth;
-
-    jmena.forEach((jm, i) => {
+    Object.values(OVOCE).forEach(svg => {
       const el = document.createElement("span");
       el.className = "fruit";
-      el.innerHTML = OVOCE[jm];
+      el.innerHTML = svg;
       sad.appendChild(el);
       kusy.push(el);
     });
-
     const mezi = (a, b) => a + Math.random() * (b - a);
-
     const skok = el => {
-      const x = mezi(2, 92);
-      const vyska = mezi(50, 130);
       const doba = mezi(.55, .85);
-      gsap.set(el, { left: x + "%", x: 0, y: 0, rotate: mezi(-25, 25), scale: 1, opacity: 1, transformOrigin: "50% 100%" });
-      const tl = gsap.timeline({
-        onComplete: () => gsap.delayedCall(mezi(.1, 1.4), () => skok(el)),
-      });
-      // tři odrazy s postupně nižším skokem, mezi nimi žuchnutí (squash)
-      let h = vyska;
+      gsap.set(el, { left: mezi(2, 92) + "%", x: 0, y: 0, rotate: mezi(-25, 25), scale: 1, opacity: 1, transformOrigin: "50% 100%" });
+      const tl = gsap.timeline({ onComplete: () => gsap.delayedCall(mezi(.1, 1.4), () => skok(el)) });
+      let h = mezi(50, 120);
       for (let i = 0; i < 3; i++) {
         tl.to(el, { y: -h, duration: doba * .5, ease: "power2.out" })
           .to(el, { y: 0, duration: doba * .5, ease: "power2.in" })
@@ -298,137 +377,12 @@
         .to(el, { opacity: 0, duration: .35, ease: "power2.in" }, tl.duration() - .35);
       el._tl = tl;
     };
-
     kusy.forEach((el, i) => gsap.delayedCall(i * .45, () => skok(el)));
     document.addEventListener("visibilitychange", () => {
       kusy.forEach(el => el._tl && (document.hidden ? el._tl.pause() : el._tl.resume()));
     });
-    void sirka;
   }
 
-
-  /* ---- Vyber si příchuť: bubliny v oblouku + rozlití barvy ---- */
-  const sekceP = document.getElementById("prichute");
-  const bubliny = sekceP && [...sekceP.querySelectorAll(".bubbles li")];
-  if (sekceP && bubliny && bubliny.length) {
-    const flood = document.getElementById("flood");
-    const jmeno = document.getElementById("flavorName");
-    const druh = document.getElementById("flavorKind");
-    const popis = document.getElementById("flavorNote");
-    const fotka = document.getElementById("flavorImg");
-    const kruh = sekceP.querySelector(".bubbles");
-
-    // rozmístění po oblouku (vlevo nahoru → dolů, jako ve figmě)
-    const rozmisti = () => {
-      const R = kruh.clientWidth / 2 - 6;
-      bubliny.forEach((li, i) => {
-        const uhel = (-108 + i * 43) * Math.PI / 180;   // oblouk na pravé straně kruhu
-        li.style.transform = `translate(${(Math.cos(uhel) * R).toFixed(1)}px, ${(Math.sin(uhel) * R).toFixed(1)}px)`;
-      });
-    };
-    rozmisti();
-    addEventListener("resize", rozmisti);
-
-    let aktivni = null;
-    let rozlevaSe = false;   // běží přelití barvy → další výběr počká, nic se nepřekrývá (jinak barvy blikají)
-    let dalsi = null;
-    const vyber = (li, hned) => {
-      if (li === aktivni) { dalsi = null; return; }
-      if (rozlevaSe && !hned) { dalsi = li; return; }
-      const b = li.querySelector("button");
-      const barva = b.dataset.c;
-      bubliny.forEach(x => x.classList.toggle("is-on", x === li));
-      aktivni = li;
-
-      // na světlé příchuti (vanilka, jahoda) musí být text tmavý, jinak je nečitelný
-      const svetlost = (() => {
-        const kanal = barva.slice(1).match(/\w\w/g).map(h => {
-          const v = parseInt(h, 16) / 255;
-          return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4);
-        });
-        return .2126 * kanal[0] + .7152 * kanal[1] + .0722 * kanal[2];
-      })();
-      const tmavy = svetlost > .32;
-      sekceP.style.setProperty("--onflavor", tmavy ? "#3A2A31" : "#ffffff");
-      sekceP.style.setProperty("--onflavor-inv", tmavy ? "#ffffff" : "#3A2A31");
-
-      jmeno.textContent = b.dataset.name;
-      druh.textContent = b.dataset.kind;
-      popis.textContent = b.dataset.note;
-
-      // velká fotka příchuti se prohodí s malým přetočením
-      if (fotka && b.dataset.img) {
-        if (lessMotion || hned) {
-          fotka.src = b.dataset.img;
-          fotka.alt = b.dataset.name;
-        } else {
-          gsap.killTweensOf(fotka);
-          gsap.to(fotka, {
-            scale: .86, opacity: 0, rotate: -6, duration: .2, ease: "power2.in",
-            onComplete: () => {
-              fotka.src = b.dataset.img;
-              fotka.alt = b.dataset.name;
-              gsap.fromTo(fotka, { scale: .86, opacity: 0, rotate: 8 },
-                { scale: 1, opacity: 1, rotate: 0, duration: .55, ease: "back.out(1.5)" });
-            },
-          });
-        }
-      }
-
-      if (lessMotion || hned) {
-        sekceP.style.setProperty("--flavor", barva);
-        return;
-      }
-      // kruh vyjede z bubliny a přelije celou sekci
-      const rs = sekceP.getBoundingClientRect(), rb = b.getBoundingClientRect();
-      const x = rb.left + rb.width / 2 - rs.left, y = rb.top + rb.height / 2 - rs.top;
-      const dosah = Math.max(
-        Math.hypot(x, y), Math.hypot(rs.width - x, y),
-        Math.hypot(x, rs.height - y), Math.hypot(rs.width - x, rs.height - y)
-      );
-      rozlevaSe = true;
-      gsap.set(flood, { backgroundColor: barva, left: x - 5, top: y - 5, scale: 0, opacity: 1 });
-      gsap.to(flood, {
-        scale: dosah / 5 + 2, duration: .7, ease: "power3.inOut",
-        onComplete: () => {
-          // nejdřív se podklad přebarví, až pak kruh zmizí — bez okamžiku, kdy by byla vidět stará barva
-          sekceP.style.setProperty("--flavor", barva);
-          requestAnimationFrame(() => {
-            gsap.set(flood, { scale: 0, opacity: 0 });
-            rozlevaSe = false;
-            if (dalsi) { const n = dalsi; dalsi = null; vyber(n); }
-          });
-        },
-      });
-      gsap.fromTo([jmeno, popis, druh], { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: .45, stagger: .05, ease: "power2.out", overwrite: true });
-    };
-
-    let umysl;
-    bubliny.forEach(li => {
-      const b = li.querySelector("button");
-      b.addEventListener("click", () => { clearTimeout(umysl); vyber(li); });
-      if (matchMedia("(hover: hover)").matches) {
-        // hover vybere až když myš na bublině chvíli zůstane — přejetí přes celý oblouk nerozbliká sekci
-        b.addEventListener("pointerenter", () => { clearTimeout(umysl); umysl = setTimeout(() => vyber(li), 170); });
-        b.addEventListener("pointerleave", () => clearTimeout(umysl));
-      }
-      b.addEventListener("focus", () => vyber(li));
-      if (b.dataset.img) { const p = new Image(); p.src = b.dataset.img; }   // předem načtené fotky, ať se při výměně neukáže prázdno
-    });
-    vyber(bubliny[0], true);
-
-    // bubliny se při příjezdu sekce vysypou po oblouku
-    // (měřítko jede přes proměnnou --in, aby zůstal funkční hover i zvýraznění výběru;
-    //  immediateRender: false = když se animace nespustí, bubliny prostě zůstanou vidět)
-    if (!lessMotion) gsap.fromTo(bubliny.map(li => li.querySelector("button")),
-      { "--in": 0, opacity: 0 },
-      {
-        "--in": 1, opacity: 1, duration: .6, ease: "back.out(2)", stagger: .07, immediateRender: false,
-        scrollTrigger: { trigger: sekceP, start: "top 78%", once: true },
-      });
-  }
-
-  // pojistka po otočení telefonu / změně velikosti okna
   let prepocet;
   ["resize", "orientationchange"].forEach(ev => addEventListener(ev, () => {
     clearTimeout(prepocet);
