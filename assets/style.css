@@ -218,15 +218,29 @@ h2 .hand { font-size: 1.16em; }
 .hlava__pozn { margin-top: 14px; opacity: .8; max-width: 34em; }
 .hlava--stred .hlava__pozn { margin-inline: auto; }
 
-.zbozi { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.polozka { position: relative; display: grid; grid-template-columns: 150px 1fr; gap: 20px; align-items: center; background: #fff; border-radius: var(--r); padding: 16px; box-shadow: var(--stin); overflow: hidden; transition: transform .3s cubic-bezier(.34, 1.56, .64, 1); }
+/* Točená zmrzlina je hlavní důvod, proč sem lidi jedou, tak dostane velkou
+   kartu přes celou šířku a zbytek se vejde do řádku pod ní. Fotka jde na celou
+   šířku karty — v malém čtverečku vedle textu z ní byla jen barevná skvrna. */
+.zbozi { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(14px, 1.6vw, 22px); }
+.polozka { position: relative; display: flex; flex-direction: column; background: #fff; border-radius: var(--r); box-shadow: var(--stin); overflow: hidden; transition: transform .3s cubic-bezier(.34, 1.56, .64, 1); }
+.polozka__foto { position: relative; margin: 0; }
+.polozka__foto img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+.polozka__text { padding: 16px 20px 22px; }
+.polozka p { margin: 0; font-size: .95rem; opacity: .75; }
+
+.polozka--hlavni { grid-column: 1 / -1; flex-direction: row; }
+.polozka--hlavni .polozka__foto { flex: 0 0 42%; }
+.polozka--hlavni .polozka__foto img { height: 100%; aspect-ratio: auto; min-height: 270px; }
+.polozka--hlavni .polozka__text { align-self: center; padding: clamp(22px, 3vw, 44px); }
+.polozka--hlavni h3 { font-size: clamp(1.8rem, 3vw, 2.5rem); margin-bottom: 10px; }
+.polozka--hlavni p { font-size: 1.06rem; max-width: 30em; }
+
+/* Cena a nálepky sedí na fotce, ne pod textem — karty tím mají stejný rytmus.
+   Cena je růžová a psaná rukou, informace zelené, ať se nepletou dohromady. */
+.znacka { position: absolute; left: 12px; top: 12px; z-index: 2; display: inline-block; padding: .3em .95em; border-radius: 999px; background: var(--pistacie); color: var(--ink); font-weight: 900; font-size: .86rem; transform: rotate(-3deg); box-shadow: 0 8px 16px -8px rgba(40, 20, 30, .55); }
+.znacka--cena { background: var(--jahoda); font-weight: 700; font-size: 1.55rem; padding: .04em .6em .14em; }
 .polozka:hover { transform: translateY(-5px); }
 .polozka::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 45%); opacity: var(--go, 0); transition: opacity .3s; }
-.polozka__foto img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 18px; }
-.polozka h3 { font-size: 1.3rem; margin-bottom: 6px; }
-.polozka p { margin: 0 0 10px; font-size: .95rem; opacity: .75; }
-.cena { display: inline-block; padding: .22em .85em; border-radius: 999px; background: var(--jahoda); font-weight: 900; font-size: .9rem; transform: rotate(-2deg); }
-.cena--mint { background: var(--pistacie); }
 
 /* ---------- 4. ceník ---------- */
 .cenik { display: grid; grid-template-columns: 1.04fr .96fr; gap: clamp(26px, 4vw, 60px); align-items: center; }
@@ -371,6 +385,7 @@ h2 .hand { font-size: 1.16em; }
 @media (max-width: 1080px) {
   .pata__mrizka { grid-template-columns: 1fr 1fr; }
   .zbozi, .mista, .citace__mrizka, .dotazy__mrizka { grid-template-columns: 1fr 1fr; }
+  .polozka--hlavni .polozka__foto { flex: 0 0 46%; }
   .recenze { grid-template-columns: 1fr; }
   .fakta { grid-template-columns: 1fr 1fr; }
   .fakta li { border-radius: var(--r) !important; }
@@ -404,7 +419,10 @@ h2 .hand { font-size: 1.16em; }
   body { font-size: 16px; }
   .pata__mrizka { grid-template-columns: 1fr; gap: 26px; }
   .zbozi, .mista, .citace__mrizka, .dotazy__mrizka, .fakta { grid-template-columns: 1fr; }
-  .polozka { grid-template-columns: 110px 1fr; gap: 14px; }
+  /* na mobilu i hlavní karta skládá fotku nad text */
+  .polozka--hlavni { flex-direction: column; }
+  .polozka--hlavni .polozka__foto { flex: none; }
+  .polozka--hlavni .polozka__foto img { aspect-ratio: 4 / 3; height: auto; min-height: 0; }
   .polaroidy { justify-content: flex-start; overflow-x: auto; scroll-snap-type: x mandatory; }
   .polaroidy figure { flex-basis: 176px; scroll-snap-align: center; }
   .kontakt__mapa iframe { height: 300px; }
