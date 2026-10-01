@@ -166,11 +166,9 @@ section[id] { scroll-margin-top: 80px; }
 
 /* ---------- běžící pás ---------- */
 .band { background: var(--ink); overflow: hidden; transform: rotate(-1.2deg); margin: -14px -16px; padding: 12px 0; position: relative; z-index: 6; }
-.band__track { display: flex; gap: 28px; width: max-content; animation: band 44s linear infinite; }
-.band.is-js .band__track { animation: none; }
+.band__track { display: flex; gap: 28px; width: max-content; }   /* pohyb resi anim.js, ktery si nejdriv naklonuje dost sad */
 .band span { display: inline-flex; align-items: center; gap: 10px; font-family: var(--hand); font-weight: 700; font-size: clamp(1.4rem, 2.5vw, 2rem); white-space: nowrap; color: var(--krem); }
 .band i { width: 20px; height: 20px; border-radius: 50% 50% 46% 46%; background: var(--c); }
-@keyframes band { to { transform: translateX(-50%); } }
 
 /* ---------- 2. vyber si příchuť ---------- */
 .blok--prichute { overflow: hidden; isolation: isolate; }

@@ -130,20 +130,43 @@
     });
   }
 
-  /* ---- běžící pás zrychluje podle scrollu ---- */
+  /* ---- běžící pás příchutí ---- */
   const pas = document.getElementById("bandTrack");
-  if (pas && !mene) {
+  if (pas) {
+    // V pásu je jen jedna sada příchutí, ale posouval se o půlku obsahu — po pár
+    // vteřinách tak dojel do prázdna a useknutě skočil zpátky. Na mobilu to bylo
+    // nejvíc vidět, protože jedna sada sotva přesáhne šířku displeje.
+    // Sadu proto klonujeme, dokud není pás aspoň o celé okno delší než jeden
+    // posun, a posouváme přesně o délku jedné sady — šev tím nikdy nenajedeš.
+    const sada = [...pas.children];
+    const mezera = parseFloat(getComputedStyle(pas).columnGap) || 0;
+    const delka = pas.scrollWidth + mezera;       // jedna sada včetně mezery za ní
+
+    const doplnKlony = () => {
+      let pojistka = 0;
+      while (pas.scrollWidth < pas.parentElement.offsetWidth + delka && pojistka++ < 30) {
+        sada.forEach(el => {
+          const klon = el.cloneNode(true);
+          klon.setAttribute("aria-hidden", "true");   // čtečka přečte příchutě jen jednou
+          pas.appendChild(klon);
+        });
+      }
+    };
+    doplnKlony();
+    addEventListener("resize", doplnKlony);
     pas.parentElement.classList.add("is-js");
-    const sirka = pas.scrollWidth / 2;
-    const jizda = gsap.to(pas, { x: -sirka, duration: sirka / 62, ease: "none", repeat: -1 });
-    let zpomal;
-    ST.create({
-      onUpdate: self => {
-        gsap.to(jizda, { timeScale: 1 + Math.min(Math.abs(self.getVelocity()) / 900, 3), duration: .3, overwrite: true });
-        clearTimeout(zpomal);
-        zpomal = setTimeout(() => gsap.to(jizda, { timeScale: 1, duration: 1.2, overwrite: true }), 260);
-      },
-    });
+
+    if (!mene) {
+      const jizda = gsap.to(pas, { x: -delka, duration: delka / 62, ease: "none", repeat: -1 });
+      let zpomal;
+      ST.create({
+        onUpdate: self => {
+          gsap.to(jizda, { timeScale: 1 + Math.min(Math.abs(self.getVelocity()) / 900, 3), duration: .3, overwrite: true });
+          clearTimeout(zpomal);
+          zpomal = setTimeout(() => gsap.to(jizda, { timeScale: 1, duration: 1.2, overwrite: true }), 260);
+        },
+      });
+    }
   }
 
   /* ---- plovoucí posyp v úvodu ---- */
