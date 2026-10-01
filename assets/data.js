@@ -61,7 +61,16 @@ window.ZD = (function () {
   /* ---------- pomůcky ---------- */
   const jeTodo = v => typeof v === "string" && v.trim().toUpperCase() === "TODO";
   const prichut = id => data.prichute.prichute.find(p => p.id === id) || null;
-  const sFotkou = () => data.prichute.prichute.filter(p => p.foto);
+  const vNabidce = () => data.prichute.prichute.filter(p => p.dostupne !== false);
+
+  // kopeček pro příchutě, které zatím nemají fotku
+  const kopecekSvg = (barva, velky) => {
+    const r = velky ? 'viewBox="0 0 120 120" class="kopecek kopecek--velky"' : 'viewBox="0 0 120 120" class="kopecek"';
+    return `<svg ${r} aria-hidden="true">` +
+      `<path d="M22 74c0-23 17-42 38-42s38 19 38 42c0 5-3 8-8 8H30c-5 0-8-3-8-8z" fill="${barva}"/>` +
+      `<path d="M38 60c4-10 12-17 22-18" stroke="rgba(255,255,255,.55)" stroke-width="7" stroke-linecap="round" fill="none"/>` +
+      `<ellipse cx="60" cy="86" rx="40" ry="7" fill="rgba(0,0,0,.12)"/></svg>`;
+  };
 
   /* ---------- hero: co se právě točí ---------- */
   function vykresliDnes() {
@@ -104,10 +113,11 @@ window.ZD = (function () {
   function vykresliBubliny() {
     const ul = document.getElementById("bubbles");
     if (!ul) return;
-    const vyber = sFotkou();
+    const vyber = vNabidce();
     if (!vyber.length) return;
 
     ul.innerHTML = "";
+    ul.dataset.pocet = vyber.length;
     vyber.forEach(p => {
       const li = document.createElement("li");
       const b = document.createElement("button");
@@ -116,9 +126,11 @@ window.ZD = (function () {
       b.dataset.kind = p.druh;
       b.dataset.name = p.nazev;
       b.dataset.note = p.popis;
-      b.dataset.img = p.foto;
+      if (p.foto) b.dataset.img = p.foto;
       b.setAttribute("aria-label", p.nazev);
-      b.innerHTML = `<img src="${p.foto}" alt="" width="560" height="560" loading="lazy">`;
+      b.innerHTML = p.foto
+        ? `<img src="${p.foto}" alt="" width="560" height="560" loading="lazy">`
+        : kopecekSvg(p.barva, false);
       li.appendChild(b);
       ul.appendChild(li);
     });

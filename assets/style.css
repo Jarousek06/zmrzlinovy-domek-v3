@@ -182,16 +182,18 @@ section[id] { scroll-margin-top: 80px; }
 .prichute__popis { font-size: 1.04rem; opacity: .92; min-height: 3.2em; }
 .bubliny { list-style: none; margin: 0; padding: 0; position: relative; width: min(370px, 38vw); aspect-ratio: 1; }
 .bubliny::before { content: ""; position: absolute; inset: 6%; border-radius: 50%; border: 2px dashed rgba(255, 255, 255, .5); }
-.bubliny li { position: absolute; left: 50%; top: 50%; margin: -41px 0 0 -41px; }
+.bubliny li { position: absolute; left: 50%; top: 50%; width: var(--bublina, 82px); height: var(--bublina, 82px); margin: calc(var(--bublina, 82px) / -2) 0 0 calc(var(--bublina, 82px) / -2); }
 .bubliny button {
   --in: 1;
-  width: 82px; height: 82px; border-radius: 50%; border: 4px solid currentColor; cursor: pointer;
+  width: 100%; height: 100%; border-radius: 50%; border: 3px solid currentColor; cursor: pointer;
   background: var(--c); padding: 0; display: grid; place-items: center; overflow: hidden; color: inherit;
   box-shadow: 0 16px 24px -14px rgba(40, 20, 30, .6);
   transform: scale(var(--in));
   transition: transform .35s cubic-bezier(.34, 1.56, .64, 1), box-shadow .3s;
 }
-.bubliny button img { width: 72%; height: 72%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .3)); pointer-events: none; }
+.bubliny button img, .bubliny button .kopecek { width: 76%; height: 76%; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .3)); pointer-events: none; }
+.prichute__kopecek { width: 100%; height: 100%; display: grid; place-items: center; }
+.prichute__kopecek svg { width: 86%; height: 86%; filter: drop-shadow(0 18px 20px rgba(40, 20, 30, .35)); }
 .bubliny button:hover, .bubliny button:focus-visible { transform: scale(calc(var(--in) * 1.14)); }
 .bubliny li.is-on button { transform: scale(calc(var(--in) * 1.22)); box-shadow: 0 0 0 7px rgba(255, 255, 255, .3), 0 20px 28px -14px rgba(40, 20, 30, .6); }
 
@@ -385,8 +387,6 @@ h2 .hand { font-size: 1.16em; }
   .zastavka__bod { position: absolute; left: -36px; top: 18px; margin: 0; }
   .zastavka__karta { text-align: left; }
   .bubliny { width: min(330px, 76vw); }
-  .bubliny li { margin: -33px 0 0 -33px; }
-  .bubliny button { width: 66px; height: 66px; border-width: 3px; }
   .prichute__foto { width: min(210px, 50vw); }
   .partner__cta { grid-auto-flow: column; justify-content: start; }
 }
@@ -406,8 +406,6 @@ h2 .hand { font-size: 1.16em; }
   .sticker--rating b { font-size: 1.55rem; }
   .tabule { padding: 22px 20px; border-width: 9px; }
   .bubliny { width: min(280px, 82vw); }
-  .bubliny li { margin: -28px 0 0 -28px; }
-  .bubliny button { width: 56px; height: 56px; }
   .partner__cta { grid-auto-flow: row; }
 }
 

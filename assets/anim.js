@@ -212,10 +212,15 @@
     const fotka = document.getElementById("flavorImg");
     const kruh = sekce.querySelector(".bubliny");
 
+    // bubliny rozsadíme po celém kruhu — kolik jich je, tolik dílků
     const rozmisti = () => {
-      const R = kruh.clientWidth / 2 - 6;
+      const n = bubliny.length;
+      const R = kruh.clientWidth / 2 - 8;
+      // aby se nedotýkaly: průměr podle rozestupu na kružnici
+      const velikost = Math.max(34, Math.min(84, 2 * R * Math.sin(Math.PI / n) - 6));
+      kruh.style.setProperty("--bublina", velikost.toFixed(1) + "px");
       bubliny.forEach((li, i) => {
-        const uhel = (-108 + i * 43) * Math.PI / 180;
+        const uhel = (-90 + i * (360 / n)) * Math.PI / 180;
         li.style.transform = `translate(${(Math.cos(uhel) * R).toFixed(1)}px, ${(Math.sin(uhel) * R).toFixed(1)}px)`;
       });
     };
@@ -233,6 +238,29 @@
 
     const zaklad = sekce.querySelector(".blok__in");
     let aktivni = null, umysl, vrstvaZiva = null;
+
+    // velký obrázek vlevo: fotka, nebo kreslený kopeček v barvě příchuti
+    const velkyKopecek = barva =>
+      '<svg viewBox="0 0 120 120" aria-hidden="true">' +
+      `<path d="M22 74c0-23 17-42 38-42s38 19 38 42c0 5-3 8-8 8H30c-5 0-8-3-8-8z" fill="${barva}"/>` +
+      '<path d="M38 60c4-10 12-17 22-18" stroke="rgba(255,255,255,.55)" stroke-width="7" stroke-linecap="round" fill="none"/>' +
+      '<ellipse cx="60" cy="88" rx="40" ry="7" fill="rgba(0,0,0,.14)"/></svg>';
+
+    const nastavObrazek = (koren, b) => {
+      const img = koren.querySelector(".prichute__foto img");
+      const kopecek = koren.querySelector(".prichute__kopecek");
+      if (!img || !kopecek) return;
+      if (b.dataset.img) {
+        img.src = b.dataset.img;
+        img.alt = b.dataset.name;
+        img.hidden = false;
+        kopecek.hidden = true;
+      } else {
+        img.hidden = true;
+        kopecek.innerHTML = velkyKopecek(b.dataset.c);
+        kopecek.hidden = false;
+      }
+    };
     const vyber = (li, hned) => {
       if (li === aktivni) return;
       const b = li.querySelector("button");
@@ -247,7 +275,7 @@
         jmeno.textContent = b.dataset.name;
         druh.textContent = b.dataset.kind;
         popis.textContent = b.dataset.note;
-        if (fotka && b.dataset.img) { fotka.src = b.dataset.img; fotka.alt = b.dataset.name; }
+        nastavObrazek(sekce, b);
       };
 
       if (mene || hned) { nastavZaklad(); return; }
@@ -273,8 +301,7 @@
       klon.querySelector(".prichute__nazev").textContent = b.dataset.name;
       klon.querySelector(".prichute__druh").textContent = b.dataset.kind;
       klon.querySelector(".prichute__popis").textContent = b.dataset.note;
-      const klonFoto = klon.querySelector(".prichute__foto img");
-      if (klonFoto && b.dataset.img) { klonFoto.src = b.dataset.img; klonFoto.alt = b.dataset.name; }
+      nastavObrazek(klon, b);
       const poradi = bubliny.indexOf(li);
       [...klon.querySelectorAll(".bubliny li")].forEach((el, i) => el.classList.toggle("is-on", i === poradi));
       vrstva.appendChild(klon);
