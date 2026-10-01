@@ -11,19 +11,19 @@
 window.ZD = (function () {
   "use strict";
 
-  const VERZE = "2";
+  const VERZE = "3";
   const CESTA = "assets/data/";
 
   /* ---------- vestavěná záloha ---------- */
   const ZALOHA = {
     prichute: {
       prichute: [
-        { id: "jahoda", nazev: "jahoda", druh: "ovocná", barva: "#F4A3B4", popis: "Stálice, kterou u nás najdete každý den. Nejčastěji v páru s vanilkou.", foto: "assets/img/prichut-jahoda.webp", dostupne: true },
-        { id: "malina", nazev: "malina", druh: "ovocná", barva: "#D2334A", popis: "Ostře červená, výrazná. Sluší jí vanilka vedle.", foto: "assets/img/prichut-malina.webp", dostupne: true },
-        { id: "jablko", nazev: "zelené jablko", druh: "ovocná", barva: "#A8C66C", popis: "Svěží a kyselejší. Dobře se snáší se skořicí.", foto: "assets/img/prichut-jablko.webp", dostupne: true },
-        { id: "vanilka", nazev: "vanilka", druh: "smetanová", barva: "#F6E7B8", popis: "Klasika, která se hodí ke každé ovocné.", foto: "assets/img/prichut-vanilka.webp", dostupne: true },
-        { id: "karamel", nazev: "slaný karamel", druh: "smetanová", barva: "#C98F4E", popis: "Sladká se špetkou soli. Bývá i v kelímcích s sebou.", foto: "assets/img/prichut-karamel.webp", dostupne: true },
-        { id: "cokolada", nazev: "čokoláda", druh: "smetanová", barva: "#8B5A3C", popis: "Tmavá a hutná. Jistota pro ty, co nechtějí experimentovat.", foto: "assets/img/prichut-cokolada.webp", dostupne: true },
+        { id: "jahoda", nazev: "jahoda", druh: "ovocná", barva: "#F4A3B4", popis: "Stálice, kterou u nás najdete každý den. Nejčastěji v páru s vanilkou.", foto: "assets/img/prichut-jahoda.webp", ikona: "assets/img/prichut-jahoda-ikona.webp", dostupne: true },
+        { id: "malina", nazev: "malina", druh: "ovocná", barva: "#D2334A", popis: "Ostře červená, výrazná. Sluší jí vanilka vedle.", foto: "assets/img/prichut-malina.webp", ikona: "assets/img/prichut-malina-ikona.webp", dostupne: true },
+        { id: "jablko", nazev: "zelené jablko", druh: "ovocná", barva: "#A8C66C", popis: "Svěží a kyselejší. Dobře se snáší se skořicí.", foto: "assets/img/prichut-jablko.webp", ikona: "assets/img/prichut-jablko-ikona.webp", dostupne: true },
+        { id: "vanilka", nazev: "vanilka", druh: "smetanová", barva: "#F6E7B8", popis: "Klasika, která se hodí ke každé ovocné.", foto: "assets/img/prichut-vanilka.webp", ikona: "assets/img/prichut-vanilka-ikona.webp", dostupne: true },
+        { id: "karamel", nazev: "slaný karamel", druh: "smetanová", barva: "#C98F4E", popis: "Sladká se špetkou soli. Bývá i v kelímcích s sebou.", foto: "assets/img/prichut-karamel.webp", ikona: "assets/img/prichut-karamel-ikona.webp", dostupne: true },
+        { id: "cokolada", nazev: "čokoláda", druh: "smetanová", barva: "#8B5A3C", popis: "Tmavá a hutná. Jistota pro ty, co nechtějí experimentovat.", foto: "assets/img/prichut-cokolada.webp", ikona: "assets/img/prichut-cokolada-ikona.webp", dostupne: true },
       ],
     },
     dnes: {
@@ -128,9 +128,13 @@ window.ZD = (function () {
       b.dataset.note = p.popis;
       if (p.foto) b.dataset.img = p.foto;
       b.setAttribute("aria-label", p.nazev);
-      b.innerHTML = p.foto
-        ? `<img src="${p.foto}" alt="" width="560" height="560" loading="lazy">`
-        : kopecekSvg(p.barva, false);
+      // Do bubliny jde čtvercový výřez zmrzliny — celý kornout by v kolečku zanikl.
+      // Výřez bublinu vyplní (je-ikona), stock fotka ovoce se do ní vejde celá.
+      b.innerHTML = p.ikona
+        ? `<img class="je-ikona" src="${p.ikona}" alt="" width="260" height="260" loading="lazy">`
+        : p.foto
+          ? `<img src="${p.foto}" alt="" width="560" height="560" loading="lazy">`
+          : kopecekSvg(p.barva, false);
       li.appendChild(b);
       ul.appendChild(li);
     });
