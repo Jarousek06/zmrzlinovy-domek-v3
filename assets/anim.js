@@ -82,29 +82,6 @@
 
   /* ---- parallax fotek ---- */
   if (!mene) {
-    gsap.to(".uvod__koláž", { y: -46, ease: "none", scrollTrigger: { trigger: ".blok--uvod", start: "top top", end: "bottom top", scrub: .6 } });
-
-    // kolečka v úvodu se jemně posouvají za myší — koláž tím ožije
-    const kolaz = document.querySelector("[data-parallax]");
-    if (kolaz && matchMedia("(hover: hover)").matches) {
-      const vrstvy = [...kolaz.querySelectorAll("[data-hloubka]")].map(el => ({
-        el, h: +el.dataset.hloubka,
-        x: gsap.quickTo(el, "x", { duration: .8, ease: "power3" }),
-        y: gsap.quickTo(el, "y", { duration: .8, ease: "power3" }),
-      }));
-      addEventListener("pointermove", e => {
-        const r = kolaz.getBoundingClientRect();
-        if (r.bottom < 0 || r.top > innerHeight) return;
-        const dx = (e.clientX - (r.left + r.width / 2)) / innerWidth;
-        const dy = (e.clientY - (r.top + r.height / 2)) / innerHeight;
-        vrstvy.forEach(v => { v.x(dx * v.h); v.y(dy * v.h); });
-      });
-    }
-
-    // kolečka se plynule vznášejí, i když myš stojí
-    gsap.utils.toArray(".uvod__kolecko").forEach((el, i) => {
-      gsap.to(el, { yPercent: i % 2 ? 6 : -6, duration: 3.4 + i * .6, ease: "sine.inOut", yoyo: true, repeat: -1 });
-    });
     gsap.utils.toArray(".polozka__foto img").forEach(img => {
       gsap.fromTo(img, { y: -10 }, { y: 10, ease: "none", scrollTrigger: { trigger: img, start: "top bottom", end: "bottom top", scrub: .8 } });
     });
@@ -134,15 +111,20 @@
       '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="%C"/></svg>',
       '<svg viewBox="0 0 24 24"><path d="M12 3c4 6 7 9 7 12.5a7 7 0 0 1-14 0C5 12 8 9 12 3z" fill="%C"/></svg>',
     ];
-    const barvy = ["%23fff", "%23A8C66C", "%23F2D45C", "%23D2334A", "%236B4430", "%23FFF3E6"];
+    // SVG se vklada inline, takze barva musi byt obycejny hex. Drive tu byla barva
+    // zapsana url-kodovane (jako pro data URI), neuplatnila se a sypani bylo cerne.
+    // Tmavou hnedou uz nedavame, na ruzove pusobila jako spina.
+    const barvy = ["#fff", "#FFF3E6", "#F2D45C", "#A8C66C", "#D2334A", "#fff"];
     const kusy = [];
-    for (let i = 0; i < 12; i++) {
+    const pocetKusu = innerWidth < 700 ? 7 : 12;   // na uzkem displeji neni kam uhnout textu
+    for (let i = 0; i < pocetKusu; i++) {
       const s = document.createElement("span");
       s.className = "floatie";
       s.innerHTML = tvary[i % tvary.length].replace("%C", barvy[i % barvy.length]);
-      s.style.left = (4 + Math.random() * 92) + "%";
+      // sypani drzime u kraju - stred uvodu ma zustat cisty
+      s.style.left = (i % 2 ? 80 + Math.random() * 16 : 4 + Math.random() * 16) + "%";
       s.style.top = (12 + Math.random() * 74) + "%";
-      s.style.width = (11 + Math.random() * 15) + "px";
+      s.style.width = (13 + Math.random() * 17) + "px";
       hriste.appendChild(s);
       kusy.push(s);
     }
@@ -151,7 +133,7 @@
       gsap.set(el, { opacity: 0, scale: .4, rotate: mezi(-40, 40) });
       const doba = mezi(3.2, 5.2);
       const tl = gsap.timeline({ onComplete: () => gsap.delayedCall(mezi(.4, 3), () => letet(el)) });
-      tl.to(el, { opacity: .9, scale: 1, duration: .5, ease: "power2.out" })
+      tl.to(el, { opacity: .75, scale: 1, duration: .5, ease: "power2.out" })
         .to(el, { y: -mezi(70, 170), duration: doba * .45, ease: "power2.out" }, 0)
         .to(el, { y: 0, duration: doba * .55, ease: "power2.in" }, doba * .45)
         .to(el, { x: mezi(-70, 70), duration: doba, ease: "sine.inOut" }, 0)

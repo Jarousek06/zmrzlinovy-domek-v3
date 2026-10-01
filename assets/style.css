@@ -78,11 +78,6 @@ section[id] { scroll-margin-top: 80px; }
 }
 .sticker:hover { --peel: 1; }
 .sticker--pill { padding: .28em 1em; font-family: var(--hand); font-weight: 700; font-size: 1.35rem; line-height: 1.25; }
-.sticker--rating { --rot: -11deg; left: -18px; bottom: 22px; width: 112px; height: 112px; display: grid; place-content: center; text-align: center; background: #fff; }
-.sticker--rating b { font-size: 1.95rem; line-height: 1; }
-.sticker--rating i { display: block; font-style: normal; font-size: .7rem; color: var(--malina); letter-spacing: .08em; }
-.sticker--rating em { display: block; font-style: normal; font-size: .66rem; opacity: .7; }
-.sticker--ferry { --rot: 6deg; right: -10px; top: 14px; background: var(--malina); color: #fff; }
 .sticker--corner { --rot: 8deg; top: -22px; right: -10px; background: var(--jahoda); }
 
 /* ---------- pruh s novinkou, navigace ---------- */
@@ -108,20 +103,27 @@ section[id] { scroll-margin-top: 80px; }
 .burger[aria-expanded="true"] span:last-child { transform: translateY(-3.5px) rotate(-45deg); }
 
 /* ---------- 1. úvod ---------- */
-.uvod { display: grid; grid-template-columns: 1.02fr .98fr; gap: clamp(24px, 4vw, 56px); align-items: center; }
+/* cisty uvod: jeden sloupec na stred, zadna fotka vedle */
+.uvod { display: grid; justify-items: center; text-align: center; max-width: 58rem; margin-inline: auto; }
+.uvod__pilulky { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px; }
+.uvod__pilulky .status { margin: 0; }
+.hodnoceni { display: inline-flex; align-items: center; gap: 9px; margin: 0; padding: 8px 18px; background: #fff; border-radius: 999px; box-shadow: var(--stin); font-size: .92rem; color: var(--ink); }
+.hodnoceni b { font-size: 1.06rem; }
+.hodnoceni i { font-style: normal; font-size: .8rem; letter-spacing: .06em; color: var(--malina); }
+.hodnoceni span { font-weight: 700; opacity: .72; }
 .blok--uvod h1 { font-size: clamp(3.2rem, 9.4vw, 7.6rem); }
 .blok--uvod h1 .hand { font-size: 1.14em; margin-top: -.12em; }
-.uvod__lead { max-width: 25em; font-size: 1.14rem; margin-top: 16px; }
-.uvod__cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 24px; }
+.uvod__lead { max-width: 27em; font-size: 1.14rem; margin: 16px auto 0; }
+.uvod__cta { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 26px; }
 .status { display: inline-flex; align-items: center; gap: 10px; padding: 8px 18px; margin: 0 0 18px; background: #fff; border-radius: 999px; box-shadow: var(--stin); font-weight: 900; font-size: .92rem; color: var(--ink); }
 .status i { width: 10px; height: 10px; border-radius: 50%; background: #B9AFB4; }
 .status.is-open i { background: #2FA55E; box-shadow: 0 0 0 4px rgba(47, 165, 94, .22); }
 
 /* co dnes točíme — hned v úvodu, ať člověk ví, pro co jede */
-.dnes { margin-top: 22px; background: rgba(255, 255, 255, .62); border-radius: var(--r); padding: 14px 18px 16px; max-width: 30em; }
+.dnes { margin: 26px auto 0; background: rgba(255, 255, 255, .62); border-radius: var(--r); padding: 14px 22px 16px; max-width: 30em; }
 .dnes__stitek { display: inline-block; font-size: .68rem; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; color: var(--malina); margin-bottom: 8px; }
 .dnes__seznam { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
-.dnes__par { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.dnes__par { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
 .dnes__kulicky { display: inline-flex; }
 .dnes__kulicky i { width: 18px; height: 18px; border-radius: 50% 50% 46% 46%; background: var(--c); box-shadow: 0 0 0 2px #fff; }
 .dnes__kulicky i + i { margin-left: -7px; }
@@ -131,19 +133,11 @@ section[id] { scroll-margin-top: 80px; }
 .dnes__pozn { margin: 8px 0 0; font-size: .88rem; opacity: .72; }
 
 /* jak daleko to k nim je */
-.dalky { list-style: none; display: flex; flex-wrap: wrap; gap: 10px 26px; margin: 26px 0 0; padding: 0; }
+.dalky { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 30px; margin: 28px 0 0; padding: 0; }
 .dalky li { display: flex; align-items: baseline; gap: 8px; }
 .dalky b { font-family: var(--hand); font-weight: 700; font-size: 1.9rem; line-height: 1; color: var(--malina); }
 .dalky span { font-weight: 700; font-size: .92rem; opacity: .78; }
 
-/* koláž fotek s jemným posunem za myší */
-.uvod__koláž { position: relative; justify-self: center; width: min(420px, 100%); }
-.uvod__foto { position: relative; margin: 0; }
-.uvod__foto img { width: 100%; border-radius: 200px 200px var(--r-velky) var(--r-velky); box-shadow: var(--stin-vic); transform: rotate(-2deg); background: #fff; }
-.uvod__kolecko { position: absolute; margin: 0; border-radius: 50%; overflow: hidden; border: 6px solid #fff; box-shadow: var(--stin-vic); will-change: transform; }
-.uvod__kolecko img { width: 100%; height: 100%; object-fit: cover; }
-.uvod__kolecko--a { width: clamp(110px, 13vw, 150px); aspect-ratio: 1; left: -46px; top: 18%; }
-.uvod__kolecko--b { width: clamp(96px, 11vw, 128px); aspect-ratio: 1; right: -34px; bottom: 12%; }
 .floaties { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1; }
 .floatie { position: absolute; display: block; opacity: 0; will-change: transform, opacity; }
 
@@ -377,10 +371,7 @@ h2 .hand { font-size: 1.16em; }
   .nav__links a { padding: 14px 0; font-size: 1.1rem; border-bottom: 2px dotted rgba(58, 42, 49, .15); }
   .burger { display: block; }
   .nav__call { display: none; }
-  .uvod, .cenik, .kontakt, .prichute__telo, .privoz, .partner { grid-template-columns: 1fr; }
-  .uvod__koláž { margin-top: 26px; width: min(360px, 84vw); }
-  .uvod__kolecko--a { left: -24px; }
-  .uvod__kolecko--b { right: -18px; }
+  .cenik, .kontakt, .prichute__telo, .privoz, .partner { grid-template-columns: 1fr; }
   .prichute__telo { justify-items: center; text-align: center; }
   .prichute__info { max-width: none; }
 
@@ -405,10 +396,6 @@ h2 .hand { font-size: 1.16em; }
   .kontakt__mapa iframe { height: 300px; }
   .dalky { gap: 8px 18px; }
   .dalky b { font-size: 1.6rem; }
-  .uvod__kolecko--a { width: 92px; left: -14px; top: 12%; }
-  .uvod__kolecko--b { width: 80px; right: -10px; }
-  .sticker--rating { left: -6px; width: 94px; height: 94px; }
-  .sticker--rating b { font-size: 1.55rem; }
   .tabule { padding: 22px 20px; border-width: 9px; }
   .bubliny { width: min(280px, 82vw); }
   .partner__cta { grid-auto-flow: row; }
