@@ -103,8 +103,23 @@ section[id] { scroll-margin-top: 80px; }
 .burger[aria-expanded="true"] span:last-child { transform: translateY(-3.5px) rotate(-45deg); }
 
 /* ---------- 1. úvod ---------- */
-/* cisty uvod: jeden sloupec na stred, zadna fotka vedle */
-.uvod { display: grid; justify-items: center; text-align: center; max-width: 58rem; margin-inline: auto; }
+/* uvod: text na stred, po stranach kornout a frappe ve vlastnich sloupcich
+   (ne pres text - at se nic nepreklada ani na uzsim monitoru) */
+.uvod { display: grid; grid-template-columns: 1fr minmax(0, 46rem) 1fr; align-items: center; column-gap: clamp(8px, 2vw, 32px); }
+.uvod__text { text-align: center; }
+/* uvod je sirsi nez zbytek stranky, jinak na kornout a frappe po stranach nezbyde misto */
+.blok--uvod .blok__in.uvod { width: min(1460px, 100%); }
+.uvod__bok { margin: 0; justify-self: center; width: min(100%, clamp(150px, 23vw, 320px)); }
+.uvod__bok img { width: 100%; height: auto; display: block; filter: drop-shadow(0 26px 26px rgba(90, 35, 55, .26)); will-change: transform; }
+.uvod__bok--vlevo { grid-column: 1; }
+.uvod__bok--vpravo { grid-column: 3; }
+
+/* Nadpis je zamerne velky, takze pod ~1240 px uz by na boky zbylo pod 170 px
+   a pusobily by jako zapomenute nalepky. Radsi je schovame a uvod je zase cisty. */
+@media (max-width: 1240px) {
+  .uvod { grid-template-columns: 1fr; }
+  .uvod__bok { display: none; }
+}
 .uvod__pilulky { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px; }
 .uvod__pilulky .status { margin: 0; }
 .hodnoceni { display: inline-flex; align-items: center; gap: 9px; margin: 0; padding: 8px 18px; background: #fff; border-radius: 999px; box-shadow: var(--stin); font-size: .92rem; color: var(--ink); }

@@ -80,6 +80,49 @@
     });
   });
 
+  /* ---- kornout a frappé po stranách úvodu ---- */
+  const boky = gsap.utils.toArray(".uvod__bok img");
+  if (boky.length && !mene) {
+    boky.forEach((el, i) => {
+      const zleva = i === 0;
+      // přílet: zvenku dovnitř, s dotočením do klidové polohy
+      gsap.from(el, {
+        x: zleva ? -70 : 70, y: 40, rotate: zleva ? -14 : 14, scale: .88, opacity: 0,
+        duration: 1.1, delay: .25 + i * .12, ease: "power3.out",
+      });
+      // klidové houpání — každý jinou rychlostí, ať to nevypadá strojově
+      gsap.to(el, {
+        yPercent: zleva ? -4.5 : 4.5, rotate: zleva ? 2.2 : -2.2,
+        duration: 3.6 + i * .8, ease: "sine.inOut", yoyo: true, repeat: -1, delay: 1.6 + i * .12,
+      });
+    });
+
+    // jemný posun za myší, každý obrázek jinou hloubkou
+    if (matchMedia("(hover: hover)").matches) {
+      const vrstvy = gsap.utils.toArray(".uvod__bok").map(fig => ({
+        h: +fig.dataset.hloubka || 20,
+        x: gsap.quickTo(fig, "x", { duration: .9, ease: "power3" }),
+        y: gsap.quickTo(fig, "y", { duration: .9, ease: "power3" }),
+      }));
+      const uvod = document.querySelector(".blok--uvod");
+      addEventListener("pointermove", e => {
+        const r = uvod.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > innerHeight) return;
+        const dx = (e.clientX - (r.left + r.width / 2)) / innerWidth;
+        const dy = (e.clientY - (r.top + r.height / 2)) / innerHeight;
+        vrstvy.forEach(v => { v.x(dx * v.h); v.y(dy * v.h); });
+      });
+    }
+
+    // při odjezdu dolů se rozestoupí ke krajům
+    gsap.utils.toArray(".uvod__bok").forEach((fig, i) => {
+      gsap.to(fig, {
+        yPercent: -18, xPercent: i === 0 ? -14 : 14, ease: "none",
+        scrollTrigger: { trigger: ".blok--uvod", start: "top top", end: "bottom top", scrub: .6 },
+      });
+    });
+  }
+
   /* ---- parallax fotek ---- */
   if (!mene) {
     gsap.utils.toArray(".polozka__foto img").forEach(img => {
