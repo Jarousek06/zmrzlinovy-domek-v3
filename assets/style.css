@@ -118,12 +118,17 @@ section[id] { scroll-margin-top: 80px; }
 .status.is-open i { background: #2FA55E; box-shadow: 0 0 0 4px rgba(47, 165, 94, .22); }
 
 /* co dnes točíme — hned v úvodu, ať člověk ví, pro co jede */
-.dnes { margin-top: 22px; background: rgba(255, 255, 255, .62); border-radius: var(--r); padding: 14px 18px; max-width: 30em; }
-.dnes__stitek { display: inline-block; font-size: .68rem; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; color: var(--malina); margin-bottom: 4px; }
-.dnes__dvojice { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
-.dnes__dvojice b { display: inline-flex; align-items: center; gap: 8px; font-size: 1.2rem; }
-.dnes__dvojice i { width: 18px; height: 18px; border-radius: 50% 50% 46% 46%; background: var(--c); box-shadow: 0 0 0 2px #fff; }
-.dnes__dvojice span { font-size: .9rem; opacity: .72; }
+.dnes { margin-top: 22px; background: rgba(255, 255, 255, .62); border-radius: var(--r); padding: 14px 18px 16px; max-width: 30em; }
+.dnes__stitek { display: inline-block; font-size: .68rem; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; color: var(--malina); margin-bottom: 8px; }
+.dnes__seznam { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.dnes__par { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.dnes__kulicky { display: inline-flex; }
+.dnes__kulicky i { width: 18px; height: 18px; border-radius: 50% 50% 46% 46%; background: var(--c); box-shadow: 0 0 0 2px #fff; }
+.dnes__kulicky i + i { margin-left: -7px; }
+.dnes__nazvy { font-size: 1.12rem; font-weight: 900; }
+.dnes__stitek-maly { font-size: .7rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; background: var(--malina); color: #fff; border-radius: 999px; padding: 3px 9px; }
+.dnes__chybi { font-size: .95rem; opacity: .8; }
+.dnes__pozn { margin: 8px 0 0; font-size: .88rem; opacity: .72; }
 
 /* jak daleko to k nim je */
 .dalky { list-style: none; display: flex; flex-wrap: wrap; gap: 10px 26px; margin: 26px 0 0; padding: 0; }

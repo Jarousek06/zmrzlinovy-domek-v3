@@ -1,0 +1,21 @@
+{
+  "_popis": "Samoobslužné automaty se zmrzlinou v kelímcích. Adresy pocházejí z vlastních příspěvků na Instagramu (29. 5. 2026). Souřadnice jsou odvozené z adres přes Nominatim (OpenStreetMap), proto overeno:false — je potřeba je projet na mapě.",
+  "domek": {
+    "id": "domek", "nazev": "Zmrzlinový domek", "mesto": "Nučnice",
+    "adresa": "Nučnice 40, 411 48 Křešice", "poznamka": "u přívozu přes Labe",
+    "lat": 50.50801, "lng": 14.22750, "stav": "provoz", "overeno": false,
+    "mapa": "https://mapy.cz/s/febajaroma"
+  },
+  "automaty": [
+    { "id": "steti", "mesto": "Štětí", "adresa": "Litoměřická 722",
+      "lat": 50.45740, "lng": 14.36944, "stav": "provoz", "poznamka": null, "overeno": false },
+    { "id": "roudnice", "mesto": "Roudnice nad Labem", "adresa": "Hornická 2500",
+      "lat": 50.42585, "lng": 14.23866, "stav": "provoz", "poznamka": null, "overeno": false },
+    { "id": "litomerice", "mesto": "Litoměřice", "adresa": "Na Výsluní",
+      "lat": 50.55008, "lng": 14.12754, "stav": "provoz", "poznamka": "vedle Alzaboxu", "overeno": false },
+    { "id": "lovosice", "mesto": "Lovosice", "adresa": "Terezínská 87",
+      "lat": 50.50912, "lng": 14.07108, "stav": "provoz", "poznamka": null, "overeno": false },
+    { "id": "melnik", "mesto": "Mělník", "adresa": "Nádražní 1750/19",
+      "lat": 50.35613, "lng": 14.48701, "stav": "mimo", "poznamka": "zadní strana budovy Barvy-Laky; od 23. 9. 2026 po poškození mimo provoz", "overeno": false }
+  ]
+}

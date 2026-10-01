@@ -1,0 +1,9 @@
+{
+  "_popis": "Co se dnes točí v domku. Tři stroje, na každém dvě příchutě. 'id' odkazuje na prichute.json. Stítek může být 'novinka', 'posledni davka' nebo null. Soubor se přepisuje ručně — jakmile bude publikovaná Google tabulka, data.js ji umí načíst místo tohoto souboru.",
+  "aktualizovano": "2026-10-01",
+  "stroje": [
+    { "stroj": 1, "leva": "jahoda", "prava": "vanilka", "stitek": null },
+    { "stroj": 2, "leva": "TODO",   "prava": "TODO",    "stitek": null },
+    { "stroj": 3, "leva": "TODO",   "prava": "TODO",    "stitek": null }
+  ]
+}

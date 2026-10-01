@@ -199,6 +199,9 @@
   });
 
   /* ---- VYBER SI PŘÍCHUŤ: barva se přelije celou sekcí ---- */
+  // Bubliny vykresluje data.js, takže se výběr musí umět navázat znovu
+  // (po načtení JSONů přijde událost "zd:data" a prvky jsou nové).
+  function spustVyberPrichuti() {
   const sekce = document.getElementById("prichute");
   const bubliny = sekce && [...sekce.querySelectorAll(".bubliny li")];
   if (sekce && bubliny && bubliny.length) {
@@ -312,6 +315,10 @@
       { "--in": 1, opacity: 1, duration: .55, ease: "back.out(2)", stagger: .06, immediateRender: false,
         scrollTrigger: { trigger: sekce, start: "top 78%", once: true } });
   }
+
+  }
+  spustVyberPrichuti();
+  document.addEventListener("zd:data", () => spustVyberPrichuti());
 
   /* ---- CESTA: kornout jede po trase ---- */
   const scena = document.getElementById("journeyStage");

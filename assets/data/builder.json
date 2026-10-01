@@ -1,0 +1,29 @@
+{
+  "_popis": "Ceník pro skládání zmrzliny. Ceny u okénka podle tabule. Polevy a posypy jsou zatím odhad — majitel musí potvrdit, co reálně má (TODO).",
+  "nadoby": [
+    { "id": "kornout-maly", "nazev": "Malý kornout", "cena": 35, "kopecku": 1, "overeno": false },
+    { "id": "kornout-velky", "nazev": "Velký kornout", "cena": 45, "kopecku": 2, "overeno": false },
+    { "id": "miska", "nazev": "Miska", "cena": 60, "kopecku": 2, "overeno": false },
+    { "id": "kelimek", "nazev": "Kelímek s sebou", "cena": null, "kopecku": 1, "overeno": false, "poznamka": "TODO: cena kelímku u okénka" }
+  ],
+  "priplatky": {
+    "poleva": { "nazev": "Poleva", "cena": 15 },
+    "posyp": { "nazev": "Posyp", "cena": 10 }
+  },
+  "polevy": [
+    { "id": "cokoladova", "nazev": "čokoládová", "barva": "#5A3524", "overeno": false },
+    { "id": "jahodova", "nazev": "jahodová", "barva": "#E0455F", "overeno": false },
+    { "id": "karamelova", "nazev": "karamelová", "barva": "#C98F4E", "overeno": false },
+    { "id": "bila", "nazev": "bílá", "barva": "#F4E7D6", "overeno": false }
+  ],
+  "posypy": [
+    { "id": "barevny", "nazev": "barevný posyp", "barvy": ["#E0445A", "#F2D45C", "#A8C66C", "#8FD3E8", "#F4A3B4"], "overeno": false },
+    { "id": "orisky", "nazev": "oříšky", "barvy": ["#C9A227", "#A2652F"], "overeno": false },
+    { "id": "oplatka", "nazev": "oplatka", "barvy": ["#E8C089"], "overeno": false }
+  ],
+  "_todo": [
+    "potvrdit cenu kelímku s sebou",
+    "potvrdit skutečný seznam polev a posypů",
+    "potvrdit, jestli smíme nabízet předpřipravenou objednávku u okénka"
+  ]
+}

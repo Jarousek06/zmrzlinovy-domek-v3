@@ -73,9 +73,12 @@
         <h1 data-reveal="chars">Zmrzlinový<br><span class="hand">domek</span></h1>
         <p class="uvod__lead">Točená zmrzlina ze tří strojů. Stojíme u&nbsp;přívozu přes Labe v&nbsp;Nučnicích — kousek od cyklostezky, s&nbsp;terasou a&nbsp;parkovištěm.</p>
 
-        <div class="dnes">
+        <div class="dnes" id="dnes">
           <span class="dnes__stitek">Dnes v&nbsp;domku</span>
-          <p class="dnes__dvojice"><b><i style="--c:#F4A3B4"></i>Jahoda × Vanilka</b> <span>a&nbsp;dvě další dvojice, které měníme skoro každý den</span></p>
+          <ul class="dnes__seznam">
+            <li class="dnes__par"><span class="dnes__kulicky" aria-hidden="true"><i style="--c:#F4A3B4"></i><i style="--c:#F6E7B8"></i></span><span class="dnes__nazvy">jahoda × vanilka</span></li>
+          </ul>
+          <p class="dnes__pozn">Další dvojice měníme skoro každý den — co je dnes, píšeme na Instagram.</p>
         </div>
 
         <div class="uvod__cta">
@@ -209,7 +212,7 @@
       <div class="tabule">
         <span class="sticker sticker--pill sticker--corner hand" aria-hidden="true">u&nbsp;okénka</span>
         <p class="tabule__nadpis hand">Točená zmrzlina</p>
-        <ul class="ceny">
+        <ul class="ceny" id="ceny">
           <li><span>Malá</span><b>35</b></li>
           <li><span>Velká</span><b>45</b></li>
           <li><span>Točená v&nbsp;misce</span><b>60</b></li>
@@ -287,7 +290,7 @@
         <p class="hlava__pozn">Naši zmrzlinu v&nbsp;kelímcích prodává pět samoobslužných automatů. Berou jen kartu a&nbsp;jedou ve dne v&nbsp;noci.</p>
       </header>
 
-      <div class="mista">
+      <div class="mista" id="mista">
         <a class="misto" href="https://mapy.cz/?q=Litom%C4%9B%C5%99ick%C3%A1%20722%2C%20%C5%A0t%C4%9Bt%C3%AD" target="_blank" rel="noopener">
           <b>Štětí</b><span>Litoměřická 722</span><em>Navigovat →</em></a>
         <a class="misto" href="https://mapy.cz/?q=Hornick%C3%A1%202500%2C%20Roudnice%20nad%20Labem" target="_blank" rel="noopener">
@@ -412,7 +415,7 @@
 
       <div class="pata__sloupec">
         <h4>Automaty 24/7</h4>
-        <ul>
+        <ul id="pataAutomaty">
           <li>Štětí — Litoměřická 722</li>
           <li>Roudnice n. L. — Hornická 2500</li>
           <li>Litoměřice — Na Výsluní</li>
@@ -447,6 +450,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js" defer></script>
 <script src="assets/main.js" defer></script>
+<script src="assets/data.js" defer></script>
 <script src="assets/anim.js" defer></script>
 </body>
 </html>
