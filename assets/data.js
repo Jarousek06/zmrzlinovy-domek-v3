@@ -11,7 +11,7 @@
 window.ZD = (function () {
   "use strict";
 
-  const VERZE = "1";
+  const VERZE = "2";
   const CESTA = "assets/data/";
 
   /* ---------- vestavěná záloha ---------- */

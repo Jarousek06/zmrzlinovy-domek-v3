@@ -1,5 +1,5 @@
 {
-  "_popis": "Všechny příchutě, které se u Zmrzlinového domku točívají. 'dostupne' = patří do běžné nabídky; co je na strojích dnes, říká dnes.json. Příchutě bez fotky mají foto: null a web jim ukáže jen barevný kopeček.",
+  "_popis": "Všechny příchutě, které se u Zmrzlinového domku točívají. 'dostupne' = patří do běžné nabídky; co je na strojích dnes, říká dnes.json. Příchutě bez fotky mají foto: null a web jim ukáže jen barevný kopeček. Fotky jsou stock (Unsplash) s odmazaným pozadím — až budou vlastní, stačí přepsat cestu.",
   "prichute": [
     { "id": "jahoda",  "nazev": "jahoda",        "druh": "ovocná",    "barva": "#F4A3B4", "popis": "Stálice, kterou u nás najdete každý den. Nejčastěji v páru s vanilkou.", "foto": "assets/img/prichut-jahoda.webp",   "dostupne": true },
     { "id": "malina",  "nazev": "malina",        "druh": "ovocná",    "barva": "#D2334A", "popis": "Ostře červená, výrazná. Sluší jí vanilka vedle.",                       "foto": "assets/img/prichut-malina.webp",   "dostupne": true },
@@ -8,16 +8,16 @@
     { "id": "karamel", "nazev": "slaný karamel", "druh": "smetanová", "barva": "#C98F4E", "popis": "Sladká se špetkou soli. Bývá i v kelímcích s sebou.",                   "foto": "assets/img/prichut-karamel.webp",  "dostupne": true },
     { "id": "cokolada","nazev": "čokoláda",      "druh": "smetanová", "barva": "#8B5A3C", "popis": "Tmavá a hutná. Jistota pro ty, co nechtějí experimentovat.",            "foto": "assets/img/prichut-cokolada.webp", "dostupne": true },
 
-    { "id": "jogurt",  "nazev": "jogurt",        "druh": "smetanová", "barva": "#FFFFFF", "popis": "Jemně nakyslá, nejčastěji jako partner k ovocné.", "foto": null, "dostupne": true },
-    { "id": "skorice", "nazev": "skořice",       "druh": "smetanová", "barva": "#D4A373", "popis": "Teplá a kořeněná, skvělá k jablku nebo hrušce.",   "foto": null, "dostupne": true },
-    { "id": "pistacie","nazev": "pistácie",      "druh": "smetanová", "barva": "#B5C98A", "popis": "Oříšková, výrazná. Objevuje se spíš občas.",       "foto": null, "dostupne": true },
-    { "id": "ananas",  "nazev": "ananas",        "druh": "ovocná",    "barva": "#F2D45C", "popis": "Sladká tropická, ideální do horka.",               "foto": null, "dostupne": true },
-    { "id": "hruska",  "nazev": "hruška",        "druh": "ovocná",    "barva": "#DCE3A1", "popis": "Jemná a málo sladká. Často se skořicí.",           "foto": null, "dostupne": true },
-    { "id": "merunka", "nazev": "meruňka",       "druh": "ovocná",    "barva": "#F3A05E", "popis": "Letní klasika, dobře se snáší s čokoládou.",       "foto": null, "dostupne": true },
-    { "id": "svestka", "nazev": "švestka",       "druh": "ovocná",    "barva": "#6B3A5B", "popis": "Tmavá a plná chuti, spíš podzimní.",               "foto": null, "dostupne": true },
-    { "id": "rybiz",   "nazev": "rybíz",         "druh": "ovocná",    "barva": "#8E2545", "popis": "Kyselejší, pro ty, co nechtějí sladké.",           "foto": null, "dostupne": true },
-    { "id": "mango",   "nazev": "mango",         "druh": "ovocná",    "barva": "#F2A03D", "popis": "Sladké a husté, bývá v páru s jogurtem.",          "foto": null, "dostupne": true },
-    { "id": "visne",   "nazev": "višeň",         "druh": "ovocná",    "barva": "#B8263C", "popis": "Nasládlá s kyselým koncem.",                       "foto": null, "dostupne": true },
-    { "id": "citron",  "nazev": "citron",        "druh": "ovocná",    "barva": "#F2D45C", "popis": "Osvěžující, hodně kyselá.",                        "foto": null, "dostupne": true }
+    { "id": "jogurt",  "nazev": "jogurt",        "druh": "smetanová", "barva": "#FFFFFF", "popis": "Jemně nakyslá, nejčastěji jako partner k ovocné.", "foto": "assets/img/prichut-jogurt.webp", "dostupne": true },
+    { "id": "skorice", "nazev": "skořice",       "druh": "smetanová", "barva": "#D4A373", "popis": "Teplá a kořeněná, skvělá k jablku nebo hrušce.",   "foto": "assets/img/prichut-skorice.webp", "dostupne": true },
+    { "id": "pistacie","nazev": "pistácie",      "druh": "smetanová", "barva": "#B5C98A", "popis": "Oříšková, výrazná. Objevuje se spíš občas.",       "foto": "assets/img/prichut-pistacie.webp", "dostupne": true },
+    { "id": "ananas",  "nazev": "ananas",        "druh": "ovocná",    "barva": "#F2D45C", "popis": "Sladká tropická, ideální do horka.",               "foto": "assets/img/prichut-ananas.webp", "dostupne": true },
+    { "id": "hruska",  "nazev": "hruška",        "druh": "ovocná",    "barva": "#DCE3A1", "popis": "Jemná a málo sladká. Často se skořicí.",           "foto": "assets/img/prichut-hruska.webp", "dostupne": true },
+    { "id": "merunka", "nazev": "meruňka",       "druh": "ovocná",    "barva": "#F3A05E", "popis": "Letní klasika, dobře se snáší s čokoládou.",       "foto": "assets/img/prichut-merunka.webp", "dostupne": true },
+    { "id": "svestka", "nazev": "švestka",       "druh": "ovocná",    "barva": "#6B3A5B", "popis": "Tmavá a plná chuti, spíš podzimní.",               "foto": "assets/img/prichut-svestka.webp", "dostupne": true },
+    { "id": "rybiz",   "nazev": "rybíz",         "druh": "ovocná",    "barva": "#8E2545", "popis": "Kyselejší, pro ty, co nechtějí sladké.",           "foto": "assets/img/prichut-rybiz.webp", "dostupne": true },
+    { "id": "mango",   "nazev": "mango",         "druh": "ovocná",    "barva": "#F2A03D", "popis": "Sladké a husté, bývá v páru s jogurtem.",          "foto": "assets/img/prichut-mango.webp", "dostupne": true },
+    { "id": "visne",   "nazev": "višeň",         "druh": "ovocná",    "barva": "#B8263C", "popis": "Nasládlá s kyselým koncem.",                       "foto": "assets/img/prichut-visne.webp", "dostupne": true },
+    { "id": "citron",  "nazev": "citron",        "druh": "ovocná",    "barva": "#F2D45C", "popis": "Osvěžující, hodně kyselá.",                        "foto": "assets/img/prichut-citron.webp", "dostupne": true }
   ]
 }

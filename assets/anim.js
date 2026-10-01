@@ -215,9 +215,9 @@
     // bubliny rozsadíme po celém kruhu — kolik jich je, tolik dílků
     const rozmisti = () => {
       const n = bubliny.length;
-      const R = kruh.clientWidth / 2 - 8;
+      const R = kruh.clientWidth / 2 - 4;
       // aby se nedotýkaly: průměr podle rozestupu na kružnici
-      const velikost = Math.max(34, Math.min(84, 2 * R * Math.sin(Math.PI / n) - 6));
+      const velikost = Math.max(34, Math.min(84, 2 * R * Math.sin(Math.PI / n) - 3));
       kruh.style.setProperty("--bublina", velikost.toFixed(1) + "px");
       bubliny.forEach((li, i) => {
         const uhel = (-90 + i * (360 / n)) * Math.PI / 180;
