@@ -174,7 +174,8 @@ section[id] { scroll-margin-top: 80px; }
 .prichute__sub { max-width: 32em; margin-top: 14px; opacity: .9; }
 .stitek { display: inline-block; text-transform: uppercase; letter-spacing: .18em; font-size: .72rem; font-weight: 900; padding: 6px 14px; border-radius: 999px; background: rgba(255, 255, 255, .22); margin-bottom: 14px; }
 .prichute__telo { display: grid; grid-template-columns: auto 1fr auto; gap: clamp(18px, 3vw, 44px); align-items: center; margin-top: clamp(26px, 4vw, 52px); }
-.prichute__foto { margin: 0; width: min(250px, 24vw); aspect-ratio: 1; display: grid; place-items: center; }
+/* stojaty pomer: kornout tak vyplni vysku a je o dost vetsi nez ve ctverci */
+.prichute__foto { margin: 0; width: min(290px, 26vw); aspect-ratio: 2 / 3; display: grid; place-items: center; }
 .prichute__foto img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 20px 22px rgba(40, 20, 30, .4)); }
 .prichute__info { max-width: 24em; }
 .prichute__druh { text-transform: uppercase; letter-spacing: .16em; font-size: .74rem; font-weight: 900; opacity: .8; margin-bottom: 4px; }
@@ -391,7 +392,7 @@ h2 .hand { font-size: 1.16em; }
   .zastavka__bod { position: absolute; left: -36px; top: 18px; margin: 0; }
   .zastavka__karta { text-align: left; }
   .bubliny { width: min(330px, 76vw); }
-  .prichute__foto { width: min(210px, 50vw); }
+  .prichute__foto { width: min(240px, 58vw); }
   .partner__cta { grid-auto-flow: column; justify-content: start; }
 }
 @media (max-width: 620px) {
