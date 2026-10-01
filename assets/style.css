@@ -50,13 +50,6 @@ section[id] { scroll-margin-top: 80px; }
 .blok--uvod { padding-top: clamp(20px, 3vw, 44px); }
 .blok--uvod::before { display: none; }
 
-/* Znak z jejich loga (kornout + domek, bez napisu) jako vodoznak za uvodem.
-   Lezi pod obsahem i pod sypanim, takze nic neprekryva. */
-.blok--uvod::after {
-  content: ""; position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%);
-  width: min(620px, 64vw); aspect-ratio: 1; z-index: 0; pointer-events: none;
-  background: url("img/logo-znak.webp") center / contain no-repeat; opacity: .13;
-}
 .blok__in { width: min(var(--sirka), 100%); margin-inline: auto; padding-inline: var(--pad); position: relative; z-index: 2; }
 
 /* ---------- tlačítka ---------- */
