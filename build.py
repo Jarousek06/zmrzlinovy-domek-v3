@@ -31,6 +31,7 @@ SKIP_DIRS = {"_zdroje", "dist", ".claude", "__pycache__", ".git"}
 SKIP_FILES = {
     "README.md", "build.py",
     ".DS_Store", "Thumbs.db", "desktop.ini",
+    ".gitignore",          # na hosting nepatří, Netlify Drop ho jinak vystaví veřejně
 }
 
 
@@ -74,6 +75,15 @@ def otisky():
     for jmeno, h in obrazky.items():
         text = text.replace(f"img/{jmeno}", f"img/{jmeno}?v={h}")
     css.write_text(text, encoding="utf-8")
+
+    # Na fotky příchutí odkazují datové JSONy, ne HTML — bez tohohle by jim otisk
+    # chyběl a po výměně obrázku by se komukoli, kdo tu už byl, ukázala stará fotka
+    # z cache. VERZE v data.js řeší jen samotné JSONy, ne obrázky uvnitř nich.
+    for j in sorted((DIST / "assets/data").glob("*.json")):
+        t = j.read_text(encoding="utf-8")
+        for jmeno, h in obrazky.items():
+            t = t.replace(f"assets/img/{jmeno}", f"assets/img/{jmeno}?v={h}")
+        j.write_text(t, encoding="utf-8")
 
     # styl a skripty až teď, kdy je jejich obsah konečný
     statika = {"assets/style.css": otisk(css)}
